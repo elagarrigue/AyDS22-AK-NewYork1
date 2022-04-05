@@ -10,7 +10,7 @@ interface SongDescriptionHelper {
     fun getReleaseDateDescription(song:Song =EmptySong): String
 }
 
-internal class SongDescriptionHelperImpl : SongDescriptionHelper {
+internal class SongDescriptionHelperImpl (releaseDateMapper: ReleaseDateMapper): SongDescriptionHelper {
     override fun getReleaseDateDescription(song: Song): String {
         var releaseDateDescription=""
         releaseDateDescription = if (song.releaseDatePrecision=="year"){
