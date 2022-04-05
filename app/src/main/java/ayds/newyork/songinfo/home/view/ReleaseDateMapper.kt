@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.home.view
 
 import ayds.newyork.songinfo.home.model.entities.Song
+import java.text.DateFormatSymbols
 
 interface ReleaseDateMapper {
     fun releaseDatePrecision(song: Song): String
@@ -9,19 +10,19 @@ interface ReleaseDateMapper {
 internal class ReleaseDateMapperImpl : ReleaseDateMapper {
     override fun releaseDatePrecision(song: Song): String =
         when (song.releaseDatePrecision) {
-            "day" -> releaseDatePrecisionDay()
-            "month" -> releaseDatePrecisionMonth()
+            "day" -> releaseDatePrecisionDay(song)
+            "month" -> releaseDatePrecisionMonth(song)
             "year" -> releaseDatePrecisionYear(song)
             else -> "error"
         }
 }
 
-private fun releaseDatePrecisionDay(): String {
-    return "TODO"
+private fun releaseDatePrecisionDay(song: Song): String {
+    return (song.releaseDate.split("-")[2])+"/"+(song.releaseDate.split("-")[1])+"/"+(song.releaseDate.split("-").first())
 }
 
-private fun releaseDatePrecisionMonth(): String {
-    return "TODO"
+private fun releaseDatePrecisionMonth(song: Song): String {
+    return DateFormatSymbols().getMonths()[((song.releaseDate.split("-")[1])).toInt()]+", "+(song.releaseDate.split("-").first())
 }
 
 private fun releaseDatePrecisionYear(song: Song): String {
