@@ -8,10 +8,11 @@ import java.text.DateFormatSymbols
 
 interface SongDescriptionHelper {
     fun getSongDescriptionText(song: Song = EmptySong): String
-    fun getReleaseDateDescription(song:Song =EmptySong): String
+    fun getReleaseDateDescription(song: Song = EmptySong): String
 }
 
-internal class SongDescriptionHelperImpl (releaseDateMapper: ReleaseDateMapper): SongDescriptionHelper {
+internal class SongDescriptionHelperImpl(releaseDateMapper: ReleaseDateMapper) :
+    SongDescriptionHelper {
     override fun getReleaseDateDescription(song: Song): String {
         return releaseDateMapper.releaseDatePrecision(song)
     }
