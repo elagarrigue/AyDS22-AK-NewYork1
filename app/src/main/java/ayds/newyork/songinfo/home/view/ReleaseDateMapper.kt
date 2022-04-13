@@ -42,7 +42,7 @@ private fun getReleaseDatePrecisionYear(releaseDate: String): String {
 
         "$year $leap"
     } catch (e: NumberFormatException) {
-        "format error"
+        throw e
     }
 }
 
