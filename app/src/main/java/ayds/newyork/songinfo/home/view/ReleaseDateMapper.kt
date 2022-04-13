@@ -1,5 +1,6 @@
 package ayds.newyork.songinfo.home.view
 
+import ayds.newyork.songinfo.home.model.entities.DatePrecision
 import ayds.newyork.songinfo.home.model.entities.Song
 import java.text.DateFormatSymbols
 
@@ -10,14 +11,13 @@ interface ReleaseDateMapper {
 internal class ReleaseDateMapperImpl : ReleaseDateMapper {
     override fun releaseDatePrecision(song: Song): String =
         when (song.releaseDatePrecision) {
-            "day" -> releaseDatePrecisionDay(song)
-            "month" -> releaseDatePrecisionMonth(song)
-            "year" -> releaseDatePrecisionYear(song)
-            else -> "error"
+            DatePrecision.DAY -> releaseDatePrecisionDay(song.releaseDate)
+            DatePrecision.MONTH -> releaseDatePrecisionMonth(song.releaseDate)
+            DatePrecision.YEAR -> releaseDatePrecisionYear(song.releaseDate)
         }
 }
 
-private fun releaseDatePrecisionDay(song: Song): String {
+private fun releaseDatePrecisionDay(releaseDate: String): String {
     val separator = "/";
     var day = song.releaseDate.split("-")[2]
     var month = song.releaseDate.split("-")[1]
@@ -26,7 +26,7 @@ private fun releaseDatePrecisionDay(song: Song): String {
     return "$day$separator$month$separator$year"
 }
 
-private fun releaseDatePrecisionMonth(song: Song): String {
+private fun releaseDatePrecisionMonth(releaseDate: String): String {
     val separator = ",";
     var month = DateFormatSymbols().getMonths()[((song.releaseDate.split("-")[1])).toInt()]
     var year = (song.releaseDate.split("-")[0]);
@@ -34,7 +34,7 @@ private fun releaseDatePrecisionMonth(song: Song): String {
 
 }
 
-private fun releaseDatePrecisionYear(song: Song): String {
+private fun releaseDatePrecisionYear(releaseDate: String): String {
     return try {
         val year: Int = song.releaseDate.toInt()
         val leap = if (year.isALeapYear()) "a leap year" else "not a leap year"
