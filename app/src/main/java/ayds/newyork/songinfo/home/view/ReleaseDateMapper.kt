@@ -5,19 +5,19 @@ import ayds.newyork.songinfo.home.model.entities.Song
 import java.text.DateFormatSymbols
 
 interface ReleaseDateMapper {
-    fun releaseDatePrecision(song: Song): String
+    fun getReleaseDatePrecision(song: Song): String
 }
 
 internal class ReleaseDateMapperImpl : ReleaseDateMapper {
-    override fun releaseDatePrecision(song: Song): String =
+    override fun getReleaseDatePrecision(song: Song): String =
         when (song.releaseDatePrecision) {
-            DatePrecision.DAY -> releaseDatePrecisionDay(song.releaseDate)
-            DatePrecision.MONTH -> releaseDatePrecisionMonth(song.releaseDate)
-            DatePrecision.YEAR -> releaseDatePrecisionYear(song.releaseDate)
+            DatePrecision.DAY -> getReleaseDatePrecisionDay(song.releaseDate)
+            DatePrecision.MONTH -> getReleaseDatePrecisionMonth(song.releaseDate)
+            DatePrecision.YEAR -> getReleaseDatePrecisionYear(song.releaseDate)
         }
 }
 
-private fun releaseDatePrecisionDay(releaseDate: String): String {
+private fun getReleaseDatePrecisionDay(releaseDate: String): String {
     val separator = "/"
     val day = releaseDate.split("-")[2]
     val month = releaseDate.split("-")[1]
@@ -26,7 +26,7 @@ private fun releaseDatePrecisionDay(releaseDate: String): String {
     return "$day$separator$month$separator$year"
 }
 
-private fun releaseDatePrecisionMonth(releaseDate: String): String {
+private fun getReleaseDatePrecisionMonth(releaseDate: String): String {
     val separator = ","
     val month = DateFormatSymbols().getMonths()[((releaseDate.split("-")[1])).toInt()]
     val year = (releaseDate.split("-")[0])
@@ -34,7 +34,7 @@ private fun releaseDatePrecisionMonth(releaseDate: String): String {
 
 }
 
-private fun releaseDatePrecisionYear(releaseDate: String): String {
+private fun getReleaseDatePrecisionYear(releaseDate: String): String {
     return try {
         val year: Int = releaseDate.toInt()
         val leap = if (year.isALeapYear()) "a leap year" else "not a leap year"
