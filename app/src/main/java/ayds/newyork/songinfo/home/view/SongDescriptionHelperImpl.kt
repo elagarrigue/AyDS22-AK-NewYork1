@@ -12,9 +12,6 @@ interface SongDescriptionHelper {
 
 internal class SongDescriptionHelperImpl(releaseDateMapper: ReleaseDateMapper) :
     SongDescriptionHelper {
-    private fun getReleaseDateDescription(song: Song): String {
-        return releaseDateMapper.getReleaseDatePrecision(song)
-    }
 
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
