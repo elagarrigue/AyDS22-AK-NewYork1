@@ -28,7 +28,7 @@ private fun getReleaseDatePrecisionDay(releaseDate: String): String {
 
 private fun getReleaseDatePrecisionMonth(releaseDate: String): String {
     val separator = ","
-    val month = DateFormatSymbols().getMonths()[((releaseDate.split("-")[1])).toInt()]
+    val month = DateFormatSymbols().months[((releaseDate.split("-")[1])).toInt()]
     val year = (releaseDate.split("-")[0])
     return "$month$separator $year"
 
