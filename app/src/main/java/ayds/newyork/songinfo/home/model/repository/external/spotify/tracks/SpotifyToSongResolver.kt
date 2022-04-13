@@ -1,5 +1,6 @@
 package ayds.newyork.songinfo.home.model.repository.external.spotify.tracks
 
+import ayds.newyork.songinfo.home.model.entities.DatePrecision
 import com.google.gson.Gson
 import ayds.newyork.songinfo.home.model.entities.SpotifySong
 import com.google.gson.JsonObject
@@ -26,16 +27,18 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
     override fun getSongFromExternalData(serviceData: String?): SpotifySong? =
         try {
             serviceData?.getFirstItem()?.let { item ->
-                SpotifySong(
-                    item.getId(),
-                    item.getSongName(),
-                    item.getArtistName(),
-                    item.getAlbumName(),
-                    item.getReleaseDate(),
-                    item.getReleaseDatePrecision(),
-                    item.getSpotifyUrl(),
-                    item.getImageUrl()
-                )
+                item.getReleaseDatePrecision()?.let {
+                    SpotifySong(
+                        item.getId(),
+                        item.getSongName(),
+                        item.getArtistName(),
+                        item.getAlbumName(),
+                        item.getReleaseDate(),
+                        it,
+                        item.getSpotifyUrl(),
+                        item.getImageUrl()
+                    )
+                }
             }
         } catch (e: Exception) {
             null
@@ -67,10 +70,18 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
         return album[RELEASE_DATE].asString
     }
 
-    private fun JsonObject.getReleaseDatePrecision(): String {
+    private fun JsonObject.getReleaseDatePrecision(): DatePrecision? {
         val album = this[ALBUM].asJsonObject
-        return album[RELEASE_DATE_PRECISION].asString
+        return getReleaseDatePrecisionAsEnum(album[RELEASE_DATE_PRECISION].asString)
     }
+
+    private fun getReleaseDatePrecisionAsEnum(releaseDatePrecision: String) =
+        when(releaseDatePrecision){
+            "day" -> DatePrecision.DAY
+            "month" -> DatePrecision.MONTH
+            "year" -> DatePrecision.YEAR
+            else -> null
+        }
 
     private fun JsonObject.getImageUrl(): String {
         val album = this[ALBUM].asJsonObject
