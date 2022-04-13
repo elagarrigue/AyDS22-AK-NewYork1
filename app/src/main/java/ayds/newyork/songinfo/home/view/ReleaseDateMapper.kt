@@ -28,7 +28,7 @@ private fun releaseDatePrecisionDay(releaseDate: String): String {
 
 private fun releaseDatePrecisionMonth(releaseDate: String): String {
     val separator = ","
-    val month = DateFormatSymbols().getMonths()[((song.releaseDate.split("-")[1])).toInt()]
+    val month = DateFormatSymbols().getMonths()[((releaseDate.split("-")[1])).toInt()]
     val year = (releaseDate.split("-")[0])
     return "$month$separator $year"
 
@@ -36,7 +36,7 @@ private fun releaseDatePrecisionMonth(releaseDate: String): String {
 
 private fun releaseDatePrecisionYear(releaseDate: String): String {
     return try {
-        val year: Int = song.releaseDate.toInt()
+        val year: Int = releaseDate.toInt()
         val leap = if (year.isALeapYear()) "a leap year" else "not a leap year"
 
         "$year $leap"
