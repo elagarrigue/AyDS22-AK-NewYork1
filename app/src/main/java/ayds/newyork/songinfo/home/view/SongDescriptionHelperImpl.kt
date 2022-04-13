@@ -25,7 +25,7 @@ internal class SongDescriptionHelperImpl(releaseDateMapper: ReleaseDateMapper) :
                 }\n" +
                         "Artist: ${song.artistName}\n" +
                         "Album: ${song.albumName}\n" +
-                        "ReleaseDate: ${getReleaseDateDescription(song)}"
+                        "ReleaseDate: ${releaseDateMapper.getReleaseDatePrecision(song)}"
             else -> "Song not found"
         }
     }
