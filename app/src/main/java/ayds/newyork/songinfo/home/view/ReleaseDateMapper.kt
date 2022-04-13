@@ -18,15 +18,20 @@ internal class ReleaseDateMapperImpl : ReleaseDateMapper {
 }
 
 private fun releaseDatePrecisionDay(song: Song): String {
-    return (song.releaseDate.split("-")[2]) + "/" + (song.releaseDate.split("-")[1]) + "/" + (song.releaseDate.split(
-        "-"
-    ).first())
+    val separator = "/";
+    var day = song.releaseDate.split("-")[2]
+    var month = song.releaseDate.split("-")[1]
+    var year = song.releaseDate.split("-")[0]
+
+    return "$day$separator$month$separator$year"
 }
 
 private fun releaseDatePrecisionMonth(song: Song): String {
-    return DateFormatSymbols().getMonths()[((song.releaseDate.split("-")[1])).toInt()] + ", " + (song.releaseDate.split(
-        "-"
-    ).first())
+    val separator = ",";
+    var month = DateFormatSymbols().getMonths()[((song.releaseDate.split("-")[1])).toInt()]
+    var year = (song.releaseDate.split("-")[0]);
+    return "$month$separator $year";
+
 }
 
 private fun releaseDatePrecisionYear(song: Song): String {
