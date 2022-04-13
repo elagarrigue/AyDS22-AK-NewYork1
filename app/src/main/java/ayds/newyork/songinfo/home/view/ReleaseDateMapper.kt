@@ -19,9 +19,10 @@ internal class ReleaseDateMapperImpl : ReleaseDateMapper {
 
 private fun getReleaseDatePrecisionDay(releaseDate: String): String {
     val separator = "/"
-    val day = releaseDate.split("-")[2]
-    val month = releaseDate.split("-")[1]
-    val year = releaseDate.split("-")[0]
+    val releaseDateArray = releaseDate.split("-").toTypedArray()
+    val day = releaseDateArray[2]
+    val month = releaseDateArray[1]
+    val year = releaseDateArray[0]
 
     return "$day$separator$month$separator$year"
 }
