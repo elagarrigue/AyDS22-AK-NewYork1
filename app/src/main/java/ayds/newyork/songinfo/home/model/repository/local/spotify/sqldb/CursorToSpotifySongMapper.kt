@@ -4,7 +4,6 @@ import android.database.Cursor
 import ayds.newyork.songinfo.home.model.entities.DatePrecision
 import ayds.newyork.songinfo.home.model.entities.SpotifySong
 import java.sql.SQLException
-import java.util.*
 
 interface CursorToSpotifySongMapper {
 
