@@ -26,20 +26,18 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
 
     override fun getSongFromExternalData(serviceData: String?): SpotifySong? =
         try {
-            serviceData?.getFirstItem()?.let { item ->
-                item.getReleaseDatePrecision()?.let {
+            serviceData?.getFirstItem()?.let {  item ->
                     SpotifySong(
                         item.getId(),
                         item.getSongName(),
                         item.getArtistName(),
                         item.getAlbumName(),
                         item.getReleaseDate(),
-                        it,
+                        item.getReleaseDatePrecision(),
                         item.getSpotifyUrl(),
                         item.getImageUrl()
                     )
                 }
-            }
         } catch (e: Exception) {
             null
         }
@@ -70,7 +68,7 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
         return album[RELEASE_DATE].asString
     }
 
-    private fun JsonObject.getReleaseDatePrecision(): DatePrecision? {
+    private fun JsonObject.getReleaseDatePrecision(): DatePrecision {
         val album = this[ALBUM].asJsonObject
         return getReleaseDatePrecisionAsEnum(album[RELEASE_DATE_PRECISION].asString)
     }
@@ -80,7 +78,7 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
             "day" -> DatePrecision.DAY
             "month" -> DatePrecision.MONTH
             "year" -> DatePrecision.YEAR
-            else -> null
+            else -> throw Exception()
         }
 
     private fun JsonObject.getImageUrl(): String {
