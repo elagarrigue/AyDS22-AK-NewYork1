@@ -22,7 +22,9 @@ private const val URL = "url"
 private const val EXTERNAL_URL = "external_urls"
 private const val SPOTIFY = "spotify"
 
-internal class JsonToSongResolver : SpotifyToSongResolver {
+internal class JsonToSongResolver(
+    private val releaseDateHelper:ReleaseDateHelper
+) : SpotifyToSongResolver {
 
     override fun getSongFromExternalData(serviceData: String?): SpotifySong? =
         try {
@@ -70,16 +72,8 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
 
     private fun JsonObject.getReleaseDatePrecision(): DatePrecision {
         val album = this[ALBUM].asJsonObject
-        return getReleaseDatePrecisionAsEnum(album[RELEASE_DATE_PRECISION].asString)
+        return releaseDateHelper.getReleaseDatePrecisionAsEnum(album[RELEASE_DATE_PRECISION].asString)
     }
-
-    private fun getReleaseDatePrecisionAsEnum(releaseDatePrecision: String) =
-        when(releaseDatePrecision){
-            "day" -> DatePrecision.DAY
-            "month" -> DatePrecision.MONTH
-            "year" -> DatePrecision.YEAR
-            else -> throw Exception()
-        }
 
     private fun JsonObject.getImageUrl(): String {
         val album = this[ALBUM].asJsonObject
