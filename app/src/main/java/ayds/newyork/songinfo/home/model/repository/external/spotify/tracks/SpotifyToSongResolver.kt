@@ -72,7 +72,8 @@ internal class JsonToSongResolver(
 
     private fun JsonObject.getReleaseDatePrecision(): DatePrecision {
         val album = this[ALBUM].asJsonObject
-        return releaseDateHelper.getReleaseDatePrecisionAsEnum(album[RELEASE_DATE_PRECISION].asString)
+        val releaseDate=album[RELEASE_DATE_PRECISION].asString
+        return releaseDateHelper.getReleaseDatePrecisionAsEnum(releaseDate)
     }
 
     private fun JsonObject.getImageUrl(): String {
