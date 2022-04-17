@@ -98,17 +98,25 @@ class OtherInfoWindow : AppCompatActivity() {
             val builder = StringBuilder()
             builder.append("<html><div width=400>")
             builder.append("<font face=\"arial\">")
-            val textWithBold=textWithBoldTerm(artistInfo,artistName)
-            builder.append(textWithBold)
+            val htmlText = replaceTextToHtml(artistInfo)
+            val htmlTextWithBoldTerm = textWithBoldTerm(htmlText, artistName)
+            builder.append(htmlTextWithBoldTerm)
             builder.append("</font></div></html>")
             return builder.toString()
         }
 
         private fun textWithBoldTerm(text: String, boldTerm: String?): String {
-            return text
-                .replace("'", " ")
-                .replace("\n", "<br>")
-                .replace("(?i)" + boldTerm!!.toRegex(), "<b>" + boldTerm.uppercase() + "</b>")
+            return text.replace(
+                "(?i)" + boldTerm!!.toRegex(),
+                "<b>" + boldTerm.uppercase() + "</b>"
+            )
         }
+
+        private fun replaceTextToHtml(text: String): String {
+            var htmlText = text.replace("'", " ")
+            htmlText = text.replace("\n", "<br>")
+            return htmlText
+        }
+
     }
 }
