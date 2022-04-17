@@ -1,29 +1,33 @@
 package ayds.newyork.songinfo.moredetails.fulllogic
 
-import android.database.sqlite.SQLiteOpenHelper
-import android.database.sqlite.SQLiteDatabase
-import android.util.Log
 import android.content.ContentValues
 import android.content.Context
-import java.util.ArrayList
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+
+private const val ARTISTS_TABLE_NAME="artists"
+private const val ARTIST_NAME_COLUMN="artist"
+private const val INFO_COLUMN="info"
+private const val SOURCE_COLUMN="source"
+private const val SOURCE_VALUE=1
 
 class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
         )
-        Log.i("DB", "DB created")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    fun saveArtist(dbHelper: DataBase, artist: String?, info: String?) {
-        val db = dbHelper.writableDatabase
-        val values = ContentValues()
-        values.put("artist", artist)
-        values.put("info", info)
-        values.put("source", 1)
-        val newRowId = db.insert("artists", null, values)
+    fun saveArtist(artist: String?, info: String?) {
+        val values = ContentValues().apply {
+            put(ARTIST_NAME_COLUMN,artist)
+            put(INFO_COLUMN, info)
+            put(SOURCE_COLUMN, SOURCE_VALUE)
+        }
+        writableDatabase?.insert(ARTISTS_TABLE_NAME, null, values)
     }
 
     fun getInfo(dbHelper: DataBase, artist: String): String? {
