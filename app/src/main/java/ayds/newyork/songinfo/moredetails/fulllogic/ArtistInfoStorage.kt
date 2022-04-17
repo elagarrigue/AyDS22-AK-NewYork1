@@ -14,14 +14,19 @@ private const val SOURCE_COLUMN = "source"
 private const val SOURCE_VALUE = 1
 private const val DATABASE_NAME = "artists.db"
 private const val DATABASE_VERSION = 1
+private const val createArtistsTableQuery: String =
+    "create table $ARTISTS_TABLE_NAME (" +
+            "$ARTIST_ID_COLUMN INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "$ARTIST_NAME_COLUMN string, " +
+            "$INFO_COLUMN string, " +
+            "$SOURCE_COLUMN integer)"
 
-
-interface ArtistInfoStorage{
+interface ArtistInfoStorage {
     fun saveArtist(artist: String?, info: String?)
     fun getArtistInfo(artistName: String): String?
 }
 
-class ArtistInfoStorageImpl(context: Context?) :ArtistInfoStorage,
+class ArtistInfoStorageImpl(context: Context?) : ArtistInfoStorage,
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     private val projection = arrayOf(
@@ -31,9 +36,7 @@ class ArtistInfoStorageImpl(context: Context?) :ArtistInfoStorage,
     )
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(
-            "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
-        )
+        db.execSQL(createArtistsTableQuery)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
@@ -71,7 +74,6 @@ class ArtistInfoStorageImpl(context: Context?) :ArtistInfoStorage,
             } else
                 return null
         }
-        cursor.close()
         return informationCollection
     }
 }
