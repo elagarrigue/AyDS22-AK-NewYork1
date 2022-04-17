@@ -6,12 +6,8 @@ import android.os.Bundle
 import ayds.newyork.songinfo.R
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import ayds.newyork.songinfo.moredetails.fulllogic.NYTimesAPI
-import ayds.newyork.songinfo.moredetails.fulllogic.DataBase
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.JsonElement
-import ayds.newyork.songinfo.moredetails.fulllogic.OtherInfoWindow
 import android.content.Intent
 import android.net.Uri
 import com.squareup.picasso.Picasso
@@ -45,7 +41,7 @@ class OtherInfoWindow : AppCompatActivity() {
         val NYTimesAPI = retrofit.create(NYTimesAPI::class.java)
         Log.e("TAG", "artistName $artistName")
         Thread {
-            var text = DataBase.getInfo(dataBase, artistName)
+            var text = ArtistInfoStorage.getInfo(artistInfoStorage, artistName)
             if (text != null) { // exists in db
                 text = "[*]$text"
             } else { // get from service
@@ -66,7 +62,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
 
                         // save to DB  <o/
-                        DataBase.saveArtist(dataBase, artistName, text)
+                        ArtistInfoStorage.saveArtist(artistInfoStorage, artistName, text)
                     }
                     val urlString = url.asString
                     findViewById<View>(R.id.openUrlButton).setOnClickListener {
@@ -90,12 +86,12 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
-    private var dataBase: DataBase? = null
+    private var artistInfoStorage: ArtistInfoStorage? = null
     private fun open(artist: String?) {
-        dataBase = DataBase(this)
-        DataBase.saveArtist(dataBase, "test", "sarasa")
-        Log.e("TAG", "" + DataBase.getInfo(dataBase, "test"))
-        Log.e("TAG", "" + DataBase.getInfo(dataBase, "nada"))
+        artistInfoStorage = ArtistInfoStorage(this)
+        ArtistInfoStorage.saveArtist(artistInfoStorage, "test", "sarasa")
+        Log.e("TAG", "" + ArtistInfoStorage.getInfo(artistInfoStorage, "test"))
+        Log.e("TAG", "" + ArtistInfoStorage.getInfo(artistInfoStorage, "nada"))
         getARtistInfo(artist)
     }
 

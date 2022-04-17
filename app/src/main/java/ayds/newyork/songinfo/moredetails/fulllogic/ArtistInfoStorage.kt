@@ -15,7 +15,13 @@ private const val SOURCE_VALUE = 1
 private const val DATABASE_NAME = "artists.db"
 private const val DATABASE_VERSION = 1
 
-class DataBase(context: Context?) :
+
+interface ArtistInfoStorage{
+    fun saveArtist(artist: String?, info: String?)
+    fun getArtistInfo(artistName: String): String?
+}
+
+class ArtistInfoStorageImpl(context: Context?) :ArtistInfoStorage,
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     private val projection = arrayOf(
@@ -32,7 +38,7 @@ class DataBase(context: Context?) :
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    fun saveArtist(artist: String?, info: String?) {
+    override fun saveArtist(artist: String?, info: String?) {
         val values = ContentValues().apply {
             put(ARTIST_NAME_COLUMN, artist)
             put(INFO_COLUMN, info)
@@ -41,7 +47,7 @@ class DataBase(context: Context?) :
         writableDatabase?.insert(ARTISTS_TABLE_NAME, null, values)
     }
 
-    fun getArtistInfo(artistName: String): String? {
+    override fun getArtistInfo(artistName: String): String? {
         val cursor = readableDatabase.query(
             ARTISTS_TABLE_NAME,
             projection,
