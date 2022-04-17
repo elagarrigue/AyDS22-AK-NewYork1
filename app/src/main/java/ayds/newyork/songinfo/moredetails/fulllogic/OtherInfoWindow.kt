@@ -21,9 +21,8 @@ import java.lang.StringBuilder
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
+    private var dataBase: DataBase? = null
 
-    //private JPanel imagePanel;
-    // private JLabel posterImageLabel;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
@@ -86,26 +85,30 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    private var dataBase: DataBase? = null
     private fun open(artist: String?) {
         dataBase = DataBase(this)
-        DataBase.saveArtist(dataBase, "test", "sarasa")
+        //DataBase.saveArtist(artist, "sarasa")
+        dataBase!!.saveArtist(artist, null)
         getArtistInfo(artist)
     }
 
     companion object {
-        const val ARTIST_NAME_EXTRA = "artistName"
-        fun textToHtml(text: String, term: String?): String {
+        //const val ARTIST_NAME_EXTRA = "artistName"
+        private fun textToHtml(artistInfo: String, artistName: String?): String {
             val builder = StringBuilder()
             builder.append("<html><div width=400>")
             builder.append("<font face=\"arial\">")
-            val textWithBold = text
-                .replace("'", " ")
-                .replace("\n", "<br>")
-                .replace("(?i)" + term!!.toRegex(), "<b>" + term.toUpperCase() + "</b>")
+            val textWithBold=textWithBoldTerm(artistInfo,artistName)
             builder.append(textWithBold)
             builder.append("</font></div></html>")
             return builder.toString()
+        }
+
+        private fun textWithBoldTerm(text: String, boldTerm: String?): String {
+            return text
+                .replace("'", " ")
+                .replace("\n", "<br>")
+                .replace("(?i)" + boldTerm!!.toRegex(), "<b>" + boldTerm.uppercase() + "</b>")
         }
     }
 }
