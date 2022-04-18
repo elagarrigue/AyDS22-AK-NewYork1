@@ -94,12 +94,12 @@ class OtherInfoWindow : AppCompatActivity() {
 
     companion object {
         //const val ARTIST_NAME_EXTRA = "artistName"
-        private fun textToHtml(artistInfo: String, artistName: String?): String {
+        private fun textToHtml(text: String, termToBold: String?): String {
             val toReturn = StringBuilder()
             toReturn.append(htmlDivWidth())
             toReturn.append(htmlFont())
-            val htmlText = replaceTextToHtml(artistInfo)
-            val textWithBoldTerm = setBoldTerm(htmlText, artistName)
+            val htmlText = replaceTextToHtml(text)
+            val textWithBoldTerm = setBoldTerm(htmlText, termToBold)
             toReturn.append(textWithBoldTerm)
             toReturn.append(htmlEndTags())
 
