@@ -95,27 +95,39 @@ class OtherInfoWindow : AppCompatActivity() {
     companion object {
         //const val ARTIST_NAME_EXTRA = "artistName"
         private fun textToHtml(artistInfo: String, artistName: String?): String {
-            val builder = StringBuilder()
-            builder.append("<html><div width=400>")
-            builder.append("<font face=\"arial\">")
+            val toReturn = StringBuilder()
+            toReturn.append(htmlDivWidth())
+            toReturn.append(htmlFont())
             val htmlText = replaceTextToHtml(artistInfo)
-            val htmlTextWithBoldTerm = textWithBoldTerm(htmlText, artistName)
-            builder.append(htmlTextWithBoldTerm)
-            builder.append("</font></div></html>")
-            return builder.toString()
+            val textWithBoldTerm = setBoldTerm(htmlText, artistName)
+            toReturn.append(textWithBoldTerm)
+            toReturn.append(htmlEndTags())
+
+            return toReturn.toString()
         }
 
-        private fun textWithBoldTerm(text: String, boldTerm: String?): String {
-            return text.replace(
-                "(?i)" + boldTerm!!.toRegex(),
-                "<b>" + boldTerm.uppercase() + "</b>"
-            )
+        private fun htmlDivWidth(): String {
+            return "<html><div width=400>"
+        }
+
+        private fun htmlFont(): String {
+            return "<font face=\"arial\">"
         }
 
         private fun replaceTextToHtml(text: String): String {
-            var htmlText = text.replace("'", " ")
-            htmlText = text.replace("\n", "<br>")
-            return htmlText
+            return text.replace("'", " ")
+                .replace("\n", "<br>")
+        }
+
+        private fun setBoldTerm(text: String, termToBold: String?): String {
+            return text.replace(
+                "(?i)" + termToBold!!.toRegex(),
+                "<b>" + termToBold.uppercase() + "</b>"
+            )
+        }
+
+        private fun htmlEndTags(): String {
+            return "</font></div></html>"
         }
 
     }
