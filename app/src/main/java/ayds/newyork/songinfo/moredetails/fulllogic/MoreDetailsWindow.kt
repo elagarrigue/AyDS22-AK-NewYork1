@@ -26,10 +26,18 @@ private const val DOCS = "docs"
 private const val ABSTRACT = "abstract"
 private const val WEB_URL = "web_url"
 private const val NO_RESULTS = "No Results"
+private const val HTML_DIV_WIDTH = "<html><div width=400>"
+private const val HTML_FONT = "<font face=\"arial\">"
+private const val HTML_END_TAGS = "</font></div></html>"
 
-class OtherInfoWindow : AppCompatActivity() {
+
+class MoreDetailsWindow : AppCompatActivity() {
     private var articlePane: TextView? = null
-    private var artistInfoStorage: ArtistInfoStorage = ArtistInfoStorageImpl(this)
+    private val artistInfoStorage: ArtistInfoStorage = ArtistInfoStorageImpl(this)
+
+    companion object {
+        const val ARTIST_NAME_EXTRA = "artistName"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,41 +103,20 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    companion object {
-        const val ARTIST_NAME_EXTRA = "artistName"
-    }
 
     private fun textToHtml(text: String, termToBold: String?): String {
-        val toReturn = StringBuilder()
-        toReturn.append(getHtmlDivWidth())
-        toReturn.append(getHtmlFont())
-        val htmlText = formatTextToHtml(text)
-        val textWithBoldTerm = getTextWithBoldTerm(htmlText, termToBold)
-        toReturn.append(textWithBoldTerm)
-        toReturn.append(htmlEndTags())
-
-        return toReturn.toString()
+        return StringBuilder().apply {
+            append(HTML_DIV_WIDTH)
+            append(HTML_FONT)
+            append(formatTextToHtmlWithBoldTerm(text, termToBold))
+            append(HTML_END_TAGS)
+        }.toString()
     }
 
-    private fun getHtmlDivWidth(): String {
-        return "<html><div width=400>"
-    }
-
-    private fun getHtmlFont(): String {
-        return "<font face=\"arial\">"
-    }
-
-    private fun formatTextToHtml(text: String): String {
+    private fun formatTextToHtmlWithBoldTerm(text: String, termToBold: String?): String {
         return text.replace("'", " ")
             .replace("\n", "<br>")
-    }
-
-    private fun getTextWithBoldTerm(text: String, termToBold: String?): String {
-        return text.replace(termToBold!!.toRegex(), "<b>" + termToBold.uppercase() + "</b>")
-    }
-
-    private fun htmlEndTags(): String {
-        return "</font></div></html>"
+            .replace(termToBold!!.toRegex(), "<b>" + termToBold.uppercase() + "</b>")
     }
 
 }
