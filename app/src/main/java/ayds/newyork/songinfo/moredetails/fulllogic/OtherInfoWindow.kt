@@ -21,7 +21,7 @@ import java.lang.StringBuilder
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
-    private var dataBase: DataBase? = null
+    private var artistInfoStorage: ArtistInfoStorage = ArtistInfoStorageImpl(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class OtherInfoWindow : AppCompatActivity() {
             .build()
         val apiNYTimes = retrofit.create(NYTimesAPI::class.java)
         Thread {
-            var artistNameDB = DataBase.getInfo(dataBase, artistName)
+            var artistNameDB = artistName?.let { artistInfoStorage.getArtistInfo(it) }
             if (artistNameDB != null) {
                 artistNameDB = "[*]$artistNameDB"
             } else {
@@ -56,14 +56,16 @@ class OtherInfoWindow : AppCompatActivity() {
                         artistNameDB = abstract.asString.replace("\\n", "\n")
                         artistNameDB = textToHtml(artistNameDB, artistName)
 
-                        DataBase.saveArtist(dataBase, artistName, artistNameDB)
+                        artistInfoStorage.saveArtist(artistName, artistNameDB)
                     }
                     updateUrlButton(url)
                 } catch (e1: IOException) {
                     e1.printStackTrace()
                 }
             }
-            updateArtistData(artistNameDB)
+            if (artistNameDB != null) {
+                updateArtistData(artistNameDB)
+            }
         }.start()
     }
 
