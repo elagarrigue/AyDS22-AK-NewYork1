@@ -15,7 +15,6 @@ import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import com.google.gson.JsonElement
-import retrofit2.Response
 import java.io.IOException
 import java.lang.StringBuilder
 
@@ -29,10 +28,11 @@ private const val NO_RESULTS = "No Results"
 private const val HTML_DIV_WIDTH = "<html><div width=400>"
 private const val HTML_FONT = "<font face=\"arial\">"
 private const val HTML_END_TAGS = "</font></div></html>"
+private const val IMAGE_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
 
 
 class MoreDetailsWindow : AppCompatActivity() {
-    private var articlePane: TextView? = null
+    private lateinit var articlePane: TextView
     private val artistInfoStorage: ArtistInfoStorage = ArtistInfoStorageImpl(this)
 
     companion object {
@@ -47,42 +47,56 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun getArtistInfo(artistName: String?) {
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-        val apiNYTimes = retrofit.create(NYTimesAPI::class.java)
+        val apiNYTimes = getNYAPI()
         Thread {
-            var artistNameDB = artistName?.let { artistInfoStorage.getArtistInfo(it) }
-            if (artistNameDB != null) {
-                artistNameDB = "[*]$artistNameDB"
+            var artistInfo = artistName?.let { artistInfoStorage.getArtistInfo(it) }
+            if (artistInfo != null) {
+                artistInfo = "[*]$artistInfo"
             } else {
-                val callResponse: Response<String>
                 try {
-                    callResponse = apiNYTimes.getArtistInfo(artistName).execute()
-                    val gson = Gson()
-                    val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
-                    val response = jobj[RESPONSE].asJsonObject
-                    val abstract = response[DOCS].asJsonArray[0].asJsonObject[ABSTRACT]
-                    val url = response[DOCS].asJsonArray[0].asJsonObject[WEB_URL]
-                    if (abstract == null) {
-                        artistNameDB = NO_RESULTS
-                    } else {
-                        artistNameDB = abstract.asString.replace("\\n", "\n")
-                        artistNameDB = textToHtml(artistNameDB, artistName)
-
-                        artistInfoStorage.saveArtist(artistName, artistNameDB)
-                    }
+                    val response = apiNYTimes.getResponse(artistName)
+                    val abstract = response.getAbstract()
+                    val url = response.getUrl()
+                    artistInfo = if (abstract == null)
+                                    NO_RESULTS
+                                 else
+                                    saveArtistInLocalStorage(artistName, abstract)
                     updateUrlButton(url)
                 } catch (e1: IOException) {
                     e1.printStackTrace()
                 }
             }
-            if (artistNameDB != null) {
-                updateArtistData(artistNameDB)
-            }
+            if (artistInfo != null)
+                updateArtistData(artistInfo)
         }.start()
+    }
+
+    private fun NYTimesAPI.getResponse(artistName: String?): JsonObject{
+        val callResponse = this.getArtistInfo(artistName).execute()
+        val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
+        return jobj[RESPONSE].asJsonObject
+    }
+
+    private fun JsonObject.getAbstract() = this[DOCS].asJsonArray[0].asJsonObject[ABSTRACT]
+
+    private fun JsonObject.getUrl() = this[DOCS].asJsonArray[0].asJsonObject[WEB_URL]
+
+    private fun saveArtistInLocalStorage(
+        artistName: String?,
+        abstract: JsonElement
+    ) :String{
+        var info = abstract.asString.replace("\\n", "\n")
+        info = textToHtml(info, artistName)
+        artistInfoStorage.saveArtist(artistName, info)
+        return info
+    }
+
+    private fun getNYAPI(): NYTimesAPI{
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+        return retrofit.create(NYTimesAPI::class.java)
     }
 
     private fun updateUrlButton(url: JsonElement) {
@@ -95,14 +109,12 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun updateArtistData(artistNameDB: String) {
-        val imageUrl =
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
+        val imageUrl = IMAGE_URL
         runOnUiThread {
             Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
-            articlePane!!.text = Html.fromHtml(artistNameDB)
+            articlePane.text = Html.fromHtml(artistNameDB)
         }
     }
-
 
     private fun textToHtml(text: String, termToBold: String?): String {
         return StringBuilder().apply {
