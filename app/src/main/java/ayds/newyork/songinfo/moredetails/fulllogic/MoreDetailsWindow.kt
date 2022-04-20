@@ -28,8 +28,8 @@ private const val NO_RESULTS = "No Results"
 private const val HTML_DIV_WIDTH = "<html><div width=400>"
 private const val HTML_FONT = "<font face=\"arial\">"
 private const val HTML_END_TAGS = "</font></div></html>"
-private const val IMAGE_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
-
+private const val IMAGE_URL =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
 
 class MoreDetailsWindow : AppCompatActivity() {
     private lateinit var articlePane: TextView
@@ -47,31 +47,34 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun getArtistInfo(artistName: String?) {
-        val apiNYTimes = getNYAPI()
         Thread {
             var artistInfo = artistName?.let { artistInfoStorage.getArtistInfo(it) }
-            if (artistInfo != null) {
-                artistInfo = "[*]$artistInfo"
-            } else {
-                try {
-                    val response = apiNYTimes.getResponse(artistName)
-                    val abstract = response.getAbstract()
-                    val url = response.getUrl()
-                    artistInfo = if (abstract == null)
-                                    NO_RESULTS
-                                 else
-                                    saveArtistInLocalStorage(artistName, abstract)
-                    updateUrlButton(url)
-                } catch (e1: IOException) {
-                    e1.printStackTrace()
-                }
-            }
-            if (artistInfo != null)
-                updateArtistData(artistInfo)
+            artistInfo = if (artistInfo != null)
+                "[*]$artistInfo"
+            else
+                searchWithExternalService(artistName)
+            updateArtistData(artistInfo)
         }.start()
     }
 
-    private fun NYTimesAPI.getResponse(artistName: String?): JsonObject{
+    private fun searchWithExternalService(artistName: String?): String {
+        lateinit var infoToReturn: String
+            try {
+                val response = getNYAPI().getResponse(artistName)
+                val abstract = response.getAbstract()
+                val url = response.getUrl()
+                infoToReturn = if (abstract == null)
+                    NO_RESULTS
+                else
+                    saveArtistInLocalStorage(artistName, abstract)
+                updateUrlButton(url)
+            } catch (e1: IOException) {
+                e1.printStackTrace()
+            }
+        return infoToReturn
+    }
+
+    private fun NYTimesAPI.getResponse(artistName: String?): JsonObject {
         val callResponse = this.getArtistInfo(artistName).execute()
         val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
         return jobj[RESPONSE].asJsonObject
@@ -84,14 +87,14 @@ class MoreDetailsWindow : AppCompatActivity() {
     private fun saveArtistInLocalStorage(
         artistName: String?,
         abstract: JsonElement
-    ) :String{
+    ): String {
         var info = abstract.asString.replace("\\n", "\n")
         info = textToHtml(info, artistName)
         artistInfoStorage.saveArtist(artistName, info)
         return info
     }
 
-    private fun getNYAPI(): NYTimesAPI{
+    private fun getNYAPI(): NYTimesAPI {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
