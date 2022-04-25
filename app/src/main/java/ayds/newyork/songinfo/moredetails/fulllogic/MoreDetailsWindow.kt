@@ -34,6 +34,8 @@ private const val SONG_FOUND_LOCAL = "[*]"
 
 class MoreDetailsWindow : AppCompatActivity() {
     private lateinit var articlePane: TextView
+    private lateinit var openUrlButton: View
+    private lateinit var imageView: ImageView
     private val artistInfoStorage: ArtistInfoStorage = ArtistInfoStorageImpl(this)
 
     companion object {
@@ -108,7 +110,7 @@ class MoreDetailsWindow : AppCompatActivity() {
         abstract: JsonElement
     ): String {
         val cleanAbstract = abstract.asString.replace("\\n", "\n")
-        val info = textToHtml(cleanAbstract,  artistName)
+        val info = textToHtml(cleanAbstract, artistName)
         artistInfoStorage.saveArtist(artistName, info)
         return info
     }
@@ -123,7 +125,8 @@ class MoreDetailsWindow : AppCompatActivity() {
 
     private fun updateUrlButton(url: JsonElement) {
         val urlString = url.asString
-        findViewById<View>(R.id.openUrlButton).setOnClickListener {
+        openUrlButton = findViewById(R.id.openUrlButton)
+        openUrlButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(urlString)
             startActivity(intent)
@@ -131,8 +134,9 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun updateArtistData(artistNameDB: String) {
+        imageView = findViewById<View>(R.id.imageView) as ImageView
         runOnUiThread {
-            Picasso.get().load(IMAGE_URL).into(findViewById<View>(R.id.imageView) as ImageView)
+            Picasso.get().load(IMAGE_URL).into(imageView)
             articlePane.text = Html.fromHtml(artistNameDB)
         }
     }
