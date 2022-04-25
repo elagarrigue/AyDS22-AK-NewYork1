@@ -30,6 +30,7 @@ private const val HTML_FONT = "<font face=\"arial\">"
 private const val HTML_END_TAGS = "</font></div></html>"
 private const val IMAGE_URL =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
+private const val SONG_FOUND_LOCAL = "[*]"
 
 class MoreDetailsWindow : AppCompatActivity() {
     private lateinit var articlePane: TextView
@@ -42,37 +43,55 @@ class MoreDetailsWindow : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
+        initProperties()
+        updateArtistInfo()
+    }
+
+    private fun initProperties() {
         articlePane = findViewById(R.id.textPane2)
+    }
+
+    private fun updateArtistInfo() {
         getArtistInfo((intent.getStringExtra(ARTIST_NAME)))
     }
 
     private fun getArtistInfo(artistName: String?) {
         Thread {
-            var artistInfo = artistName?.let { artistInfoStorage.getArtistInfo(it) }
-            artistInfo = if (artistInfo != null)
-                "[*]$artistInfo"
-            else
-                searchWithExternalService(artistName)
-            updateArtistData(artistInfo)
+            searchArtist(artistName)
         }.start()
     }
 
+    private fun searchArtist(artistName: String?) {
+        var artistInfo = artistName?.let { artistInfoStorage.getArtistInfo(it) }
+        artistInfo?.let {
+            SONG_FOUND_LOCAL + artistInfo
+        } ?: run {
+            artistInfo = searchWithExternalService(artistName)
+        }
+        updateArtistData(artistInfo)
+    }
+
     private fun searchWithExternalService(artistName: String?): String {
-        lateinit var infoToReturn: String
-            try {
-                val response = getNYAPI().getResponse(artistName)
-                val abstract = response.getAbstract()
-                val url = response.getUrl()
-                infoToReturn = if (abstract == null)
-                    NO_RESULTS
-                else
-                    saveArtistInLocalStorage(artistName, abstract)
-                updateUrlButton(url)
-            } catch (e1: IOException) {
-                e1.printStackTrace()
+        var infoToReturn: String = NO_RESULTS
+        try {
+            val abstract = getAbstract(artistName)
+            abstract?.let {
+                infoToReturn = saveArtistInLocalStorage(artistName, abstract)
             }
+            val url = getUrl(artistName)
+            updateUrlButton(url)
+
+        } catch (e1: IOException) {
+            e1.printStackTrace()
+        }
         return infoToReturn
     }
+
+    private fun getAbstract(artistName: String?): JsonElement? =
+        getNYAPI().getResponse(artistName).getAbstract()
+
+    private fun getUrl(artistName: String?) =
+        getNYAPI().getResponse(artistName).getUrl()
 
     private fun NYTimesAPI.getResponse(artistName: String?): JsonObject {
         val callResponse = this.getArtistInfo(artistName).execute()
@@ -88,8 +107,8 @@ class MoreDetailsWindow : AppCompatActivity() {
         artistName: String?,
         abstract: JsonElement
     ): String {
-        var info = abstract.asString.replace("\\n", "\n")
-        info = textToHtml(info, artistName)
+        val cleanAbstract = abstract.asString.replace("\\n", "\n")
+        val info = textToHtml(cleanAbstract,  artistName)
         artistInfoStorage.saveArtist(artistName, info)
         return info
     }
@@ -111,7 +130,7 @@ class MoreDetailsWindow : AppCompatActivity() {
         }
     }
 
-    private fun updateArtistData(artistNameDB: String) {
+    private fun updateArtistData(artistNameDB: String?) {
         val imageUrl = IMAGE_URL
         runOnUiThread {
             Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
