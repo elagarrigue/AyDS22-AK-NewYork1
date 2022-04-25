@@ -131,9 +131,8 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun updateArtistData(artistNameDB: String?) {
-        val imageUrl = IMAGE_URL
         runOnUiThread {
-            Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
+            Picasso.get().load(IMAGE_URL).into(findViewById<View>(R.id.imageView) as ImageView)
             articlePane.text = Html.fromHtml(artistNameDB)
         }
     }
