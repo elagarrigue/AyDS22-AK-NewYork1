@@ -48,30 +48,30 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun initProperties() {
-        articlePane = findViewById(R.id.textPane2)
+        articlePane = findViewById(R.id.articlePane)
     }
 
     private fun updateArtistInfo() {
-        getArtistInfo((intent.getStringExtra(ARTIST_NAME)))
+        getArtistInfo((intent.getStringExtra(ARTIST_NAME).toString()))
     }
 
-    private fun getArtistInfo(artistName: String?) {
+    private fun getArtistInfo(artistName: String) {
         Thread {
             searchArtist(artistName)
         }.start()
     }
 
-    private fun searchArtist(artistName: String?) {
-        var artistInfo = artistName?.let { artistInfoStorage.getArtistInfo(it) }
+    private fun searchArtist(artistName: String) {
+        var artistInfo = artistName.let { artistInfoStorage.getArtistInfo(it) }
         artistInfo?.let {
             SONG_FOUND_LOCAL + artistInfo
         } ?: run {
             artistInfo = searchWithExternalService(artistName)
         }
-        updateArtistData(artistInfo)
+        artistInfo?.let { updateArtistData(it) }
     }
 
-    private fun searchWithExternalService(artistName: String?): String {
+    private fun searchWithExternalService(artistName: String): String {
         var infoToReturn: String = NO_RESULTS
         try {
             val abstract = getAbstract(artistName)
@@ -87,10 +87,10 @@ class MoreDetailsWindow : AppCompatActivity() {
         return infoToReturn
     }
 
-    private fun getAbstract(artistName: String?): JsonElement? =
+    private fun getAbstract(artistName: String): JsonElement? =
         getNYAPI().getResponse(artistName).getAbstract()
 
-    private fun getUrl(artistName: String?) =
+    private fun getUrl(artistName: String) =
         getNYAPI().getResponse(artistName).getUrl()
 
     private fun NYTimesAPI.getResponse(artistName: String?): JsonObject {
@@ -104,7 +104,7 @@ class MoreDetailsWindow : AppCompatActivity() {
     private fun JsonObject.getUrl() = this[DOCS].asJsonArray[0].asJsonObject[WEB_URL]
 
     private fun saveArtistInLocalStorage(
-        artistName: String?,
+        artistName: String,
         abstract: JsonElement
     ): String {
         val cleanAbstract = abstract.asString.replace("\\n", "\n")
@@ -130,14 +130,14 @@ class MoreDetailsWindow : AppCompatActivity() {
         }
     }
 
-    private fun updateArtistData(artistNameDB: String?) {
+    private fun updateArtistData(artistNameDB: String) {
         runOnUiThread {
             Picasso.get().load(IMAGE_URL).into(findViewById<View>(R.id.imageView) as ImageView)
             articlePane.text = Html.fromHtml(artistNameDB)
         }
     }
 
-    private fun textToHtml(text: String, termToBold: String?): String {
+    private fun textToHtml(text: String, termToBold: String): String {
         return StringBuilder().apply {
             append(HTML_DIV_WIDTH)
             append(HTML_FONT)
@@ -146,10 +146,10 @@ class MoreDetailsWindow : AppCompatActivity() {
         }.toString()
     }
 
-    private fun formatTextToHtmlWithBoldTerm(text: String, termToBold: String?): String {
+    private fun formatTextToHtmlWithBoldTerm(text: String, termToBold: String): String {
         return text.replace("'", " ")
             .replace("\n", "<br>")
-            .replace(termToBold!!.toRegex(), "<b>" + termToBold.uppercase() + "</b>")
+            .replace(termToBold.toRegex(), "<b>" + termToBold.uppercase() + "</b>")
     }
 
 }
