@@ -60,7 +60,8 @@ class ArtistInfoStorageImpl(context: Context?) : ArtistInfoStorage,
             null,
             "$ARTIST_NAME_COLUMN DESC"
         )
-        return mapToList(cursor)?.get(0)
+        val informationCollection= mapToList(cursor);
+        return informationCollection?.first()
     }
 
     private fun mapToList(cursor: Cursor): MutableList<String>? {
