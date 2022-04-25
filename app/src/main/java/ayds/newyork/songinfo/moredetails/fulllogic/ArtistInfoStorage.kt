@@ -22,7 +22,7 @@ private const val createArtistsTableQuery: String =
             "$SOURCE_COLUMN integer)"
 
 interface ArtistInfoStorage {
-    fun saveArtist(artist: String?, info: String?)
+    fun saveArtist(artist: String, info: String)
     fun getArtistInfo(artistName: String): String?
 }
 
@@ -41,7 +41,7 @@ class ArtistInfoStorageImpl(context: Context?) : ArtistInfoStorage,
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    override fun saveArtist(artist: String?, info: String?) {
+    override fun saveArtist(artist: String, info: String) {
         val values = ContentValues().apply {
             put(ARTIST_NAME_COLUMN, artist)
             put(INFO_COLUMN, info)
