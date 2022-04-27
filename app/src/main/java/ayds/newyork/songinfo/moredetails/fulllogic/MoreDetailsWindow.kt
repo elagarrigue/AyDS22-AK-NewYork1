@@ -36,6 +36,7 @@ class MoreDetailsWindow : AppCompatActivity() {
     private lateinit var articlePane: TextView
     private lateinit var openUrlButton: View
     private lateinit var imageView: ImageView
+    private lateinit var nyAPI: NYTimesAPI
     private val artistInfoStorage: ArtistInfoStorage = ArtistInfoStorageImpl(this)
 
     companion object {
@@ -51,10 +52,13 @@ class MoreDetailsWindow : AppCompatActivity() {
 
     private fun initProperties() {
         articlePane = findViewById(R.id.articlePane)
+        openUrlButton = findViewById(R.id.openUrlButton)
+        imageView = findViewById<View>(R.id.imageView) as ImageView
     }
 
     private fun updateArtistInfo() {
-        getArtistInfo((intent.getStringExtra(ARTIST_NAME).toString()))
+        val artistNameToSearch = intent.getStringExtra(ARTIST_NAME).toString()
+        getArtistInfo(artistNameToSearch)
     }
 
     private fun getArtistInfo(artistName: String) {
@@ -76,6 +80,7 @@ class MoreDetailsWindow : AppCompatActivity() {
     private fun searchWithExternalService(artistName: String): String {
         var infoToReturn: String = NO_RESULTS
         try {
+            nyAPI = getNYAPI()
             val abstract = getAbstract(artistName)
             abstract?.let {
                 infoToReturn = saveArtistInLocalStorage(artistName, abstract)
@@ -90,10 +95,10 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun getAbstract(artistName: String): JsonElement? =
-        getNYAPI().getResponse(artistName).getAbstract()
+        nyAPI.getResponse(artistName).getAbstract()
 
     private fun getUrl(artistName: String) =
-        getNYAPI().getResponse(artistName).getUrl()
+        nyAPI.getResponse(artistName).getUrl()
 
     private fun NYTimesAPI.getResponse(artistName: String?): JsonObject {
         val callResponse = this.getArtistInfo(artistName).execute()
@@ -125,7 +130,7 @@ class MoreDetailsWindow : AppCompatActivity() {
 
     private fun updateUrlButton(url: JsonElement) {
         val urlString = url.asString
-        openUrlButton = findViewById(R.id.openUrlButton)
+
         openUrlButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(urlString)
@@ -134,7 +139,7 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun updateArtistData(artistNameDB: String) {
-        imageView = findViewById<View>(R.id.imageView) as ImageView
+
         runOnUiThread {
             Picasso.get().load(IMAGE_URL).into(imageView)
             articlePane.text = Html.fromHtml(artistNameDB)
