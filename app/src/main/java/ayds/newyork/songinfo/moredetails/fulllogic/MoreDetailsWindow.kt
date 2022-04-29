@@ -34,8 +34,8 @@ class MoreDetailsWindow : AppCompatActivity() {
     private lateinit var articlePane: TextView
     private lateinit var openUrlButton: View
     private lateinit var imageView: ImageView
-    private val nyAPI = getNYAPI()
-    private val artistInfoStorage: ArtistInfoStorage = ArtistInfoStorageImpl(this)
+    private lateinit var nyAPI: NYTimesAPI
+    private lateinit var artistInfoStorage: ArtistInfoStorage
 
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
@@ -52,6 +52,8 @@ class MoreDetailsWindow : AppCompatActivity() {
         articlePane = findViewById(R.id.articlePane)
         openUrlButton = findViewById(R.id.openUrlButton)
         imageView = findViewById<View>(R.id.imageView) as ImageView
+        nyAPI = getNYAPI()
+        artistInfoStorage = ArtistInfoStorageImpl(this)
     }
 
     private fun updateArtistInfo() {
@@ -61,11 +63,13 @@ class MoreDetailsWindow : AppCompatActivity() {
 
     private fun getArtistInfo(artistName: String) {
         Thread {
-            searchArtist(artistName)
+            val artistInfo = searchArtist(artistName)
+            updateUrlButton(artistName)
+            updateArtistData(artistInfo!!)
         }.start()
     }
 
-    private fun searchArtist(artistName: String) {
+    private fun searchArtist(artistName: String): String? {
         var artistInfo = artistInfoStorage.getArtistInfo(artistName)
 
         artistInfo?.let {
@@ -74,9 +78,7 @@ class MoreDetailsWindow : AppCompatActivity() {
             val artistInfoJson = searchWithExternalService(artistName)
             artistInfo = artistInfoJson?.let { saveArtistInLocalStorage(artistName, it) }
         }
-
-        updateUrlButton(artistName)
-        updateArtistData(artistInfo!!)
+        return artistInfo
     }
 
     private fun searchWithExternalService(artistName: String): JsonElement? =
@@ -118,10 +120,14 @@ class MoreDetailsWindow : AppCompatActivity() {
         val urlString = url.asString
 
         openUrlButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(urlString)
-            startActivity(intent)
+            clickUrlButtom(urlString)
         }
+    }
+
+    private fun clickUrlButtom(urlString: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(urlString)
+        startActivity(intent)
     }
 
     private fun updateArtistData(artistNameDB: String) {
