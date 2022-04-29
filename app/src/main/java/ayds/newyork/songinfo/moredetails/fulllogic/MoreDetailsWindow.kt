@@ -23,7 +23,6 @@ private const val RESPONSE = "response"
 private const val DOCS = "docs"
 private const val ABSTRACT = "abstract"
 private const val WEB_URL = "web_url"
-private const val NO_RESULTS = "No Results"
 private const val HTML_DIV_WIDTH = "<html><div width=400>"
 private const val HTML_FONT = "<font face=\"arial\">"
 private const val HTML_END_TAGS = "</font></div></html>"
@@ -67,25 +66,20 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun searchArtist(artistName: String) {
-        var artistInfo = artistName.let { artistInfoStorage.getArtistInfo(it) }
-        if (artistInfo == null) {
-            searchWithExternalService(artistName)
-            val artistInfoJson = getAbstract(artistName)
-            artistInfo = artistInfoJson?.let { saveArtistInLocalStorage(artistName, it) }
+        var artistInfo = artistInfoStorage.getArtistInfo(artistName)
+        artistInfo = if (artistInfo == null) {
+            val artistInfoJson = searchWithExternalService(artistName)
+            artistInfoJson?.let { saveArtistInLocalStorage(artistName, it) }
         } else {
-            artistInfo.let { SONG_FOUND_LOCAL + artistInfo }
+            SONG_FOUND_LOCAL + artistInfo
         }
         if (artistInfo != null) {
+            updateUrlButton(artistName)
             updateArtistData(artistInfo)
         }
     }
 
-    private fun searchWithExternalService(artistName: String) {
-        val url = getUrl(artistName)
-        updateUrlButton(url)
-    }
-
-    private fun getAbstract(artistName: String): JsonElement? =
+    private fun searchWithExternalService(artistName: String): JsonElement? =
         nyAPI.getResponse(artistName).getAbstract()
 
     private fun getUrl(artistName: String) =
@@ -119,7 +113,8 @@ class MoreDetailsWindow : AppCompatActivity() {
         return retrofit.create(NYTimesAPI::class.java)
     }
 
-    private fun updateUrlButton(url: JsonElement) {
+    private fun updateUrlButton(artistName: String) {
+        val url = getUrl(artistName)
         val urlString = url.asString
 
         openUrlButton.setOnClickListener {
