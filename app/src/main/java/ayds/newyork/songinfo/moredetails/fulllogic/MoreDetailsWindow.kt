@@ -68,30 +68,23 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun searchArtist(artistName: String) {
-        var artistInfo = artistName.let { artistInfoStorage.getArtistInfo(it) }
+        val abstract = getAbstract(artistName)
+        abstract?.let {
+            saveArtistInLocalStorage(artistName, abstract)
+        }
+        val artistInfo = artistName.let { artistInfoStorage.getArtistInfo(it) }
         artistInfo?.let {
             SONG_FOUND_LOCAL + artistInfo
         } ?: run {
-            artistInfo = searchWithExternalService(artistName)
+            searchWithExternalService(artistName)
         }
         artistInfo?.let { updateArtistData(it) }
     }
 
-    private fun searchWithExternalService(artistName: String): String {
-        var infoToReturn: String = NO_RESULTS
-        try {
+    private fun searchWithExternalService(artistName: String) {
             nyAPI = getNYAPI()
-            val abstract = getAbstract(artistName)
-            abstract?.let {
-                infoToReturn = saveArtistInLocalStorage(artistName, abstract)
-            }
             val url = getUrl(artistName)
             updateUrlButton(url)
-
-        } catch (e1: IOException) {
-            e1.printStackTrace()
-        }
-        return infoToReturn
     }
 
     private fun getAbstract(artistName: String): JsonElement? =
