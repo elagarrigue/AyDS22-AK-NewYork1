@@ -15,7 +15,6 @@ import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import com.google.gson.JsonElement
-import java.io.IOException
 import java.lang.StringBuilder
 
 private const val ARTIST_NAME = "artistName"
@@ -36,7 +35,7 @@ class MoreDetailsWindow : AppCompatActivity() {
     private lateinit var articlePane: TextView
     private lateinit var openUrlButton: View
     private lateinit var imageView: ImageView
-    private var nyAPI = getNYAPI()
+    private val nyAPI = getNYAPI()
     private val artistInfoStorage: ArtistInfoStorage = ArtistInfoStorageImpl(this)
 
     companion object {
@@ -70,8 +69,9 @@ class MoreDetailsWindow : AppCompatActivity() {
     private fun searchArtist(artistName: String) {
         var artistInfo = artistName.let { artistInfoStorage.getArtistInfo(it) }
         if (artistInfo == null) {
-            val abstract = searchWithExternalService(artistName)
-            artistInfo = abstract?.let { saveArtistInLocalStorage(artistName, it) }
+            searchWithExternalService(artistName)
+            val artistInfoJson = getAbstract(artistName)
+            artistInfo = artistInfoJson?.let { saveArtistInLocalStorage(artistName, it) }
         } else {
             artistInfo.let { SONG_FOUND_LOCAL + artistInfo }
         }
@@ -80,10 +80,9 @@ class MoreDetailsWindow : AppCompatActivity() {
         }
     }
 
-    private fun searchWithExternalService(artistName: String): JsonElement? {
+    private fun searchWithExternalService(artistName: String) {
         val url = getUrl(artistName)
         updateUrlButton(url)
-        return getAbstract(artistName)
     }
 
     private fun getAbstract(artistName: String): JsonElement? =
@@ -94,8 +93,8 @@ class MoreDetailsWindow : AppCompatActivity() {
 
     private fun NYTimesAPI.getResponse(artistName: String?): JsonObject {
         val callResponse = this.getArtistInfo(artistName).execute()
-        val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
-        return jobj[RESPONSE].asJsonObject
+        val infoJson = Gson().fromJson(callResponse.body(), JsonObject::class.java)
+        return infoJson[RESPONSE].asJsonObject
     }
 
     private fun JsonObject.getAbstract() = this[DOCS].asJsonArray[0].asJsonObject[ABSTRACT]
