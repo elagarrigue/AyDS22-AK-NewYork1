@@ -29,6 +29,7 @@ private const val HTML_END_TAGS = "</font></div></html>"
 private const val IMAGE_URL =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
 private const val SONG_FOUND_LOCAL = "[*]"
+private const val SONG_NOT_FOUND = " "
 
 class MoreDetailsWindow : AppCompatActivity() {
     private lateinit var articlePane: TextView
@@ -49,10 +50,22 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun initProperties() {
+        initGUI()
+        initAPI()
+        initLocalStorage()
+    }
+
+    private fun initGUI(){
         articlePane = findViewById(R.id.articlePane)
         openUrlButton = findViewById(R.id.openUrlButton)
         imageView = findViewById<View>(R.id.imageView) as ImageView
+    }
+
+    private fun initAPI(){
         nyAPI = getNYAPI()
+    }
+
+    private fun initLocalStorage(){
         artistInfoStorage = ArtistInfoStorageImpl(this)
     }
 
@@ -65,20 +78,22 @@ class MoreDetailsWindow : AppCompatActivity() {
         Thread {
             val artistInfo = searchArtist(artistName)
             updateUrlButton(artistName)
-            updateArtistData(artistInfo!!)
+            updateArtistData(artistInfo)
         }.start()
     }
 
-    private fun searchArtist(artistName: String): String? {
+    private fun searchArtist(artistName: String): String {
         var artistInfo = artistInfoStorage.getArtistInfo(artistName)
 
         artistInfo?.let {
             SONG_FOUND_LOCAL + artistInfo
         } ?: run {
-            val artistInfoJson = searchWithExternalService(artistName)
-            artistInfo = artistInfoJson?.let { saveArtistInLocalStorage(artistName, it) }
+            val artistInfoFromExternal = searchWithExternalService(artistName)
+            artistInfo = artistInfoFromExternal?.let { saveArtistInLocalStorage(artistName, it) }
         }
-        return artistInfo
+        return artistInfo?.let {
+            artistInfo
+        }?: run { SONG_NOT_FOUND }
     }
 
     private fun searchWithExternalService(artistName: String): JsonElement? =
@@ -130,11 +145,15 @@ class MoreDetailsWindow : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun updateArtistData(artistNameDB: String) {
+    private fun updateArtistData(artistName: String) {
         runOnUiThread {
-            Picasso.get().load(IMAGE_URL).into(imageView)
-            articlePane.text = Html.fromHtml(artistNameDB)
+            updateDataOnView(artistName)
         }
+    }
+
+    private fun updateDataOnView(artistName: String) {
+        Picasso.get().load(IMAGE_URL).into(imageView)
+        articlePane.text = Html.fromHtml(artistName)
     }
 
     private fun textToHtml(text: String, termToBold: String): String {
