@@ -67,16 +67,16 @@ class MoreDetailsWindow : AppCompatActivity() {
 
     private fun searchArtist(artistName: String) {
         var artistInfo = artistInfoStorage.getArtistInfo(artistName)
-        artistInfo = if (artistInfo == null) {
-            val artistInfoJson = searchWithExternalService(artistName)
-            artistInfoJson?.let { saveArtistInLocalStorage(artistName, it) }
-        } else {
+
+        artistInfo?.let {
             SONG_FOUND_LOCAL + artistInfo
+        } ?: run {
+            val artistInfoJson = searchWithExternalService(artistName)
+            artistInfo = artistInfoJson?.let { saveArtistInLocalStorage(artistName, it) }
         }
-        if (artistInfo != null) {
-            updateUrlButton(artistName)
-            updateArtistData(artistInfo)
-        }
+
+        updateUrlButton(artistName)
+        updateArtistData(artistInfo!!)
     }
 
     private fun searchWithExternalService(artistName: String): JsonElement? =
@@ -125,7 +125,6 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun updateArtistData(artistNameDB: String) {
-
         runOnUiThread {
             Picasso.get().load(IMAGE_URL).into(imageView)
             articlePane.text = Html.fromHtml(artistNameDB)
