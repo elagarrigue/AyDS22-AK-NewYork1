@@ -36,7 +36,7 @@ class MoreDetailsWindow : AppCompatActivity() {
     private lateinit var articlePane: TextView
     private lateinit var openUrlButton: View
     private lateinit var imageView: ImageView
-    private lateinit var nyAPI: NYTimesAPI
+    private var nyAPI = getNYAPI()
     private val artistInfoStorage: ArtistInfoStorage = ArtistInfoStorageImpl(this)
 
     companion object {
@@ -68,23 +68,22 @@ class MoreDetailsWindow : AppCompatActivity() {
     }
 
     private fun searchArtist(artistName: String) {
-        val abstract = getAbstract(artistName)
-        abstract?.let {
-            saveArtistInLocalStorage(artistName, abstract)
+        var artistInfo = artistName.let { artistInfoStorage.getArtistInfo(it) }
+        if (artistInfo == null) {
+            val abstract = searchWithExternalService(artistName)
+            artistInfo = abstract?.let { saveArtistInLocalStorage(artistName, it) }
+        } else {
+            artistInfo.let { SONG_FOUND_LOCAL + artistInfo }
         }
-        val artistInfo = artistName.let { artistInfoStorage.getArtistInfo(it) }
-        artistInfo?.let {
-            SONG_FOUND_LOCAL + artistInfo
-        } ?: run {
-            searchWithExternalService(artistName)
+        if (artistInfo != null) {
+            updateArtistData(artistInfo)
         }
-        artistInfo?.let { updateArtistData(it) }
     }
 
-    private fun searchWithExternalService(artistName: String) {
-            nyAPI = getNYAPI()
-            val url = getUrl(artistName)
-            updateUrlButton(url)
+    private fun searchWithExternalService(artistName: String): JsonElement? {
+        val url = getUrl(artistName)
+        updateUrlButton(url)
+        return getAbstract(artistName)
     }
 
     private fun getAbstract(artistName: String): JsonElement? =
