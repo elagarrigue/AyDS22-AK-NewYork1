@@ -18,7 +18,7 @@ internal class ArticleRepositoryImpl(
         when (article) {
             is EmptyInfo -> {
                 article = nyInfoService.getArtistInfo(artistName)
-                nyLocalStorage.saveArtist(article)
+                nyLocalStorage.saveArtist(artistName, article)
             }
         }
         return article
