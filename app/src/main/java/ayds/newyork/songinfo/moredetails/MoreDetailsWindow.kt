@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.fulllogic
+package ayds.newyork.songinfo.moredetails
 
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
@@ -135,11 +135,11 @@ class MoreDetailsWindow : AppCompatActivity() {
         val urlString = url.asString
 
         openUrlButton.setOnClickListener {
-            clickUrlButtom(urlString)
+            clickUrlButton(urlString)
         }
     }
 
-    private fun clickUrlButtom(urlString: String) {
+    private fun clickUrlButton(urlString: String) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(urlString)
         startActivity(intent)

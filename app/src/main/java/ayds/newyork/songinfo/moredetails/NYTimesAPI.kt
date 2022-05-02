@@ -1,5 +1,4 @@
-package ayds.newyork.songinfo.moredetails.fulllogic
-
+package ayds.newyork.songinfo.moredetails
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

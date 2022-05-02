@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.fulllogic
+package ayds.newyork.songinfo.moredetails
 
 import android.content.ContentValues
 import android.content.Context
@@ -60,7 +60,7 @@ class ArtistInfoStorageImpl(context: Context?) : ArtistInfoStorage,
             null,
             "$ARTIST_NAME_COLUMN DESC"
         )
-        val informationCollection= mapToList(cursor);
+        val informationCollection= mapToList(cursor)
         return informationCollection?.first()
     }
 
