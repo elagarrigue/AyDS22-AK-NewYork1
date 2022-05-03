@@ -8,7 +8,7 @@ interface Info {
     var isLocallyStored: Boolean
 }
 
-data class ArtistInfoSong(
+data class ArtistInfo(
     override val artistId: Int,
     override val artistName: String,
     override val artistInformation: String,

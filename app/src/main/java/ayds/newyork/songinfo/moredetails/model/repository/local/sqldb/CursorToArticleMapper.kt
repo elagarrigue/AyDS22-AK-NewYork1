@@ -1,7 +1,7 @@
 package ayds.newyork.songinfo.moredetails.model.repository.local.sqldb
 
 import android.database.Cursor
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfoSong
+import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyInfo
 import ayds.newyork.songinfo.moredetails.model.entities.Info
 
@@ -13,7 +13,7 @@ internal class CursorToArticleMapperImpl : CursorToArticleMapper{
     override fun map(cursor: Cursor): Info {
         with(cursor) {
             if (moveToNext()) {
-                return ArtistInfoSong(
+                return ArtistInfo(
                     artistId = getInt(cursor.getColumnIndexOrThrow(ARTICLE_ID_COLUMN)),
                     artistName = getString(cursor.getColumnIndexOrThrow(ARTIST_NAME_COLUMN)),
                     artistInformation = getString(cursor.getColumnIndexOrThrow(ARTICLE_INFO_COLUMN)),
