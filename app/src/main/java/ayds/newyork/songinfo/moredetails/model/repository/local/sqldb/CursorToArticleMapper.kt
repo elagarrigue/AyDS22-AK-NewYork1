@@ -14,10 +14,10 @@ internal class CursorToArticleMapperImpl : CursorToArticleMapper{
         with(cursor) {
             if (moveToNext()) {
                 return ArtistInfoSong(
-                    artistId = getInt(cursor.getColumnIndexOrThrow(ARTIST_ID_COLUMN)),
+                    artistId = getInt(cursor.getColumnIndexOrThrow(ARTICLE_ID_COLUMN)),
                     artistName = getString(cursor.getColumnIndexOrThrow(ARTIST_NAME_COLUMN)),
-                    artistInformation = getString(cursor.getColumnIndexOrThrow(INFO_COLUMN)),
-                    articleUrl = getString(cursor.getColumnIndexOrThrow(URL_COLUMN))
+                    artistInformation = getString(cursor.getColumnIndexOrThrow(ARTICLE_INFO_COLUMN)),
+                    articleUrl = getString(cursor.getColumnIndexOrThrow(ARTICLE_URL_COLUMN))
                 )
             }
         }
