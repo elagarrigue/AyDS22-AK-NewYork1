@@ -12,7 +12,7 @@ internal class NYInfoServiceImpl(
 
     override fun getArtistInfo(artistName: String): ArtistInfo? {
         val callResponse = getArtistInfoFromService(artistName)
-        return nyTimesToInfoResolver.getArtistInfoFromExternalData(callResponse.body())
+        return nyTimesToInfoResolver.getArtistInfoFromExternalData(callResponse.body(),artistName)
     }
 
     private fun getArtistInfoFromService(query: String): Response<String> {
