@@ -14,8 +14,6 @@ internal class CursorToArticleMapperImpl : CursorToArticleMapper{
         with(cursor) {
             if (moveToNext()) {
                 return ArtistInfo(
-                    artistId = getInt(cursor.getColumnIndexOrThrow(ARTICLE_ID_COLUMN)),
-                    artistName = getString(cursor.getColumnIndexOrThrow(ARTIST_NAME_COLUMN)),
                     artistInformation = getString(cursor.getColumnIndexOrThrow(ARTICLE_INFO_COLUMN)),
                     articleUrl = getString(cursor.getColumnIndexOrThrow(ARTICLE_URL_COLUMN))
                 )
