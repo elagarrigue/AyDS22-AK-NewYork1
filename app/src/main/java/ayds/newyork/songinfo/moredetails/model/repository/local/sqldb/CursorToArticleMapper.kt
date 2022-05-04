@@ -2,23 +2,23 @@ package ayds.newyork.songinfo.moredetails.model.repository.local.sqldb
 
 import android.database.Cursor
 import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyInfo
-import ayds.newyork.songinfo.moredetails.model.entities.Info
 
 interface CursorToArticleMapper {
-    fun map(cursor: Cursor): Info
+    fun map(cursor: Cursor): ArtistInfo?
 }
 
 internal class CursorToArticleMapperImpl : CursorToArticleMapper{
-    override fun map(cursor: Cursor): Info {
+    override fun map(cursor: Cursor): ArtistInfo?  {
         with(cursor) {
-            if (moveToNext()) {
-                return ArtistInfo(
+            return if (moveToNext()) {
+                ArtistInfo(
                     artistInformation = getString(cursor.getColumnIndexOrThrow(ARTICLE_INFO_COLUMN)),
                     articleUrl = getString(cursor.getColumnIndexOrThrow(ARTICLE_URL_COLUMN))
                 )
+            } else {
+                null
             }
-        }
-        return EmptyInfo
+
     }
+}
 }
