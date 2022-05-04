@@ -7,18 +7,19 @@ import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
 interface NYTimesToInfoResolver {
     fun getArtistInfoFromExternalData(serviceData: String?): ArtistInfo?
 }
-private const val TEST = "items"
-private const val ID = "id"
+
+private const val RESPONSE = "response"
+private const val DOCS = "docs"
+private const val ABSTRACT = "abstract"
+private const val WEB_URL = "web_url"
 
 internal class JsonToInfoResolver(
 ) : NYTimesToInfoResolver {
 
     override fun getArtistInfoFromExternalData(serviceData: String?): ArtistInfo? =
         try {
-            serviceData?.getFirstItem()?.let {  item ->
+            serviceData?.getResponse()?.let {  item ->
                 ArtistInfo(
-                    item.getId(),
-                    item.getArtistName(),
                     item.getArtistInformation(),
                     item.getUrl()
                 )
@@ -27,29 +28,19 @@ internal class JsonToInfoResolver(
             null
         }
 
-    private fun String?.getFirstItem(): JsonObject {
-        //TODO!
-        val jobj = Gson().fromJson(this, JsonObject::class.java)
-        val tracks = jobj[TEST].asJsonObject
-        val items = tracks[TEST].asJsonArray
-        return items[0].asJsonObject
+    private fun String?.getResponse(): JsonObject {
+        val infoJson = Gson().fromJson(this, JsonObject::class.java)
+        return infoJson[RESPONSE].asJsonObject
     }
-    private fun JsonObject.getId() = this[ID].asInt
 
-    private fun JsonObject.getUrl(): String {
-        //TODO!
-        val album = this[TEST].asJsonObject
-        return album[TEST].asJsonArray[1].asJsonObject[TEST].asString
+    private fun JsonObject.getArtistInformation():String{
+        return this[DOCS].asJsonArray[0].asJsonObject[ABSTRACT].asString
     }
-    private fun JsonObject.getArtistName(): String {
-        //TODO!
-        val album = this[TEST].asJsonObject
-        return album[TEST].asJsonArray[1].asJsonObject[TEST].asString
+
+    private fun JsonObject.getUrl():String{
+        return this[DOCS].asJsonArray[0].asJsonObject[WEB_URL].asString
     }
-    private fun JsonObject.getArtistInformation(): String {
-        //TODO!
-        val album = this[TEST].asJsonObject
-        return album[TEST].asJsonArray[1].asJsonObject[TEST].asString
-    }
+
+
 
 }
