@@ -18,7 +18,7 @@ internal class JsonToInfoResolver(
 
     override fun getArtistInfoFromExternalData(serviceData: String?): ArtistInfo? =
         try {
-            serviceData?.getResponse()?.let {  item ->
+            serviceData?.getResponse()?.let { item ->
                 ArtistInfo(
                     item.getArtistInformation(),
                     item.getUrl()
@@ -33,14 +33,11 @@ internal class JsonToInfoResolver(
         return infoJson[RESPONSE].asJsonObject
     }
 
-    private fun JsonObject.getArtistInformation():String{
+    private fun JsonObject.getArtistInformation(): String {
         return this[DOCS].asJsonArray[0].asJsonObject[ABSTRACT].asString
     }
 
-    private fun JsonObject.getUrl():String{
+    private fun JsonObject.getUrl(): String {
         return this[DOCS].asJsonArray[0].asJsonObject[WEB_URL].asString
     }
-
-
-
 }
