@@ -1,19 +1,17 @@
 package ayds.newyork.songinfo.moredetails.view
 
 import android.os.Bundle
-import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
-import ayds.newyork.songinfo.home.view.HomeUiEvent
-import ayds.newyork.songinfo.home.view.HomeUiState
+import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
+import ayds.newyork.songinfo.moredetails.model.entities.Info
 import ayds.observer.Observable
 import ayds.observer.Subject
 import com.squareup.picasso.Picasso
 
-private const val ARTIST_NAME = "artistName"
 private const val IMAGE_URL =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
 
@@ -29,6 +27,7 @@ class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
     private lateinit var articlePane: TextView
     private lateinit var openUrlButton: View
     private lateinit var imageView: ImageView
+    private lateinit var moreDetailsModel: MoreDetailsModel
 
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
@@ -37,7 +36,7 @@ class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         initGUI()
-        updateArtistInfo()
+        initObservers()
     }
 
     private fun initGUI(){
@@ -46,36 +45,35 @@ class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         imageView = findViewById<View>(R.id.imageView) as ImageView
     }
 
-    private fun updateArtistInfo() {
-        val artistNameToSearch = intent.getStringExtra(ARTIST_NAME).toString()
-        getArtistInfo(artistNameToSearch)
+    private fun initObservers() {
+        moreDetailsModel.articleObservable
+            .subscribe { value -> updateArtistInfo(value) }
     }
 
-    private fun getArtistInfo(artistName: String) {
-        Thread {
-            val artistInfo = getAPIInfo(artistName)
-            updateUrlButton(artistName)
-            updateArtistData(artistInfo)
-        }.start()
+    private fun updateArtistInfo(artistInfo: Info) {
+        updateUrlButton(artistInfo.articleUrl)
+        updateArtistData(artistInfo.artistInformation)
     }
 
-    private fun getAPIInfo(artistName: String): String {
-        return ""
+    private fun updateUrlButton(articleUrl: String) {
+        //uiState = uiState.copy(url = artistName)
     }
 
-    private fun updateUrlButton(artistName: String) {
-
-    }
-
-    private fun updateArtistData(artistName: String) {
+    private fun updateArtistData(artistInfo: String) {
         runOnUiThread {
-            updateDataOnView(artistName)
+            updateDataOnView(artistInfo)
         }
     }
 
-    private fun updateDataOnView(artistName: String) {
-        Picasso.get().load(IMAGE_URL).into(imageView)
-        articlePane.text = Html.fromHtml(artistName)
+    private fun updateDataOnView(artistDesc: String) {
+        uiState = uiState.copy(
+            //logoUrl = IMAGE_URL,
+            //artistDescription = artistDesc
+        )
+    }
+
+    private fun notifyMoreInfoAction() {
+        //onActionSubject.notify(MoreDetailsUiEvent.OpenInfoUrl)
     }
 
 }
