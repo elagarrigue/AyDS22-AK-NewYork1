@@ -1,14 +1,14 @@
 package ayds.newyork.songinfo.moredetails.model.repository
 
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyInfo
-import ayds.newyork.songinfo.moredetails.model.entities.Info
+import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
+import ayds.newyork.songinfo.moredetails.model.entities.Article
 import ayds.newyork.songinfo.moredetails.model.repository.external.NYInfoService
 import ayds.newyork.songinfo.moredetails.model.repository.local.NYLocalStorage
 
 
 interface ArticleRepository {
-    fun getArticleByArtistName(artistName: String): Info
+    fun getArticleByArtistName(artistName: String): Article
 }
 
 internal class ArticleRepositoryImpl(
@@ -16,7 +16,7 @@ internal class ArticleRepositoryImpl(
     private val nyLocalStorage: NYLocalStorage
 ) : ArticleRepository {
 
-    override fun getArticleByArtistName(artistName: String): Info {
+    override fun getArticleByArtistName(artistName: String): Article {
         var article = nyLocalStorage.getArtistInfo(artistName)
 
         when {
@@ -34,10 +34,10 @@ internal class ArticleRepositoryImpl(
             }
         }
 
-        return article ?: EmptyInfo
+        return article ?: EmptyArticle
     }
 
-    private fun markArticleAsLocal(article: ArtistInfo) {
+    private fun markArticleAsLocal(article: NYArticle) {
         article.isLocallyStored = true
     }
 }

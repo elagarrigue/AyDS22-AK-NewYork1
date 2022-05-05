@@ -1,6 +1,6 @@
 package ayds.newyork.songinfo.moredetails.model.repository.external.infos
 
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
 import ayds.newyork.songinfo.moredetails.model.repository.external.NYInfoService
 import retrofit2.Response
 
@@ -10,7 +10,7 @@ internal class NYInfoServiceImpl(
 ):NYInfoService {
 
 
-    override fun getArtistInfo(artistName: String): ArtistInfo? {
+    override fun getArtistInfo(artistName: String): NYArticle? {
         val callResponse = getArtistInfoFromService(artistName)
         return nyTimesToInfoResolver.getArtistInfoFromExternalData(callResponse.body(),artistName)
     }

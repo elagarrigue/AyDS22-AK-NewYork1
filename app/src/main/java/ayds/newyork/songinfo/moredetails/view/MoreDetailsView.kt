@@ -7,10 +7,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
-import ayds.newyork.songinfo.moredetails.model.entities.Info
+import ayds.newyork.songinfo.moredetails.model.entities.Article
 import ayds.observer.Observable
 import ayds.observer.Subject
-import com.squareup.picasso.Picasso
 
 private const val IMAGE_URL =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
@@ -50,9 +49,9 @@ class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
             .subscribe { value -> updateArtistInfo(value) }
     }
 
-    private fun updateArtistInfo(artistInfo: Info) {
-        updateUrlButton(artistInfo.articleUrl)
-        updateArtistData(artistInfo.artistInformation)
+    private fun updateArtistInfo(artistArticle: Article) {
+        updateUrlButton(artistArticle.articleUrl)
+        updateArtistData(artistArticle.articleInformation)
     }
 
     private fun updateUrlButton(articleUrl: String) {

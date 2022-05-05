@@ -1,20 +1,23 @@
 package ayds.newyork.songinfo.moredetails.model.entities
 
-interface Info {
-    val artistInformation: String
+interface Article {
+    val articleInformation: String
     val articleUrl: String
+    val source: Int
     var isLocallyStored: Boolean
 }
 
-data class ArtistInfo(
-    override val artistInformation: String,
+data class NYArticle(
+    override val articleInformation: String,
     override val articleUrl: String,
+    override val source: Int = 1,
     override var isLocallyStored: Boolean=false
-) : Info
+) : Article
 
-object EmptyInfo: Info{
-    override val artistInformation: String=""
+object EmptyArticle: Article{
+    override val articleInformation: String=""
     override val articleUrl: String = ""
+    override val source: Int = -1
     override var isLocallyStored: Boolean=false
 
 }

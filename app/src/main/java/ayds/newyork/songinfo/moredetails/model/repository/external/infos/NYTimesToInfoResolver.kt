@@ -2,11 +2,11 @@ package ayds.newyork.songinfo.moredetails.model.repository.external.infos
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
 import java.lang.StringBuilder
 
 interface NYTimesToInfoResolver {
-    fun getArtistInfoFromExternalData(serviceData: String?, artistName: String): ArtistInfo?
+    fun getArtistInfoFromExternalData(serviceData: String?, artistName: String): NYArticle?
 }
 
 private const val RESPONSE = "response"
@@ -19,10 +19,10 @@ private const val HTML_END_TAGS = "</font></div></html>"
 
 internal class JsonToInfoResolver : NYTimesToInfoResolver {
 
-    override fun getArtistInfoFromExternalData(serviceData: String?, artistName:String): ArtistInfo? =
+    override fun getArtistInfoFromExternalData(serviceData: String?, artistName:String): NYArticle? =
         try {
             serviceData?.getResponse()?.let { item ->
-                ArtistInfo(
+                NYArticle(
                     item.getArtistInformation(artistName),
                     item.getUrl()
                 )

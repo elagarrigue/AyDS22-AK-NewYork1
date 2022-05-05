@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
 import ayds.newyork.songinfo.moredetails.model.repository.local.NYLocalStorage
 
 internal class ArticleLocalStorageImpl(
@@ -20,7 +20,7 @@ internal class ArticleLocalStorageImpl(
         ARTICLE_INFO_COLUMN
     )
 
-    override fun getArtistInfo(artistName: String): ArtistInfo? {
+    override fun getArtistInfo(artistName: String): NYArticle? {
         val cursor = readableDatabase.query(
             ARTICLES_TABLE_NAME,
             projection,
@@ -33,10 +33,10 @@ internal class ArticleLocalStorageImpl(
         return cursorToArticleMapper.map(cursor)
     }
 
-    override fun saveArtist(artistName: String, article: ArtistInfo) {
+    override fun saveArtist(artistName: String, article: NYArticle) {
         val values = ContentValues().apply {
             put(ARTIST_NAME_COLUMN, artistName)
-            put(ARTICLE_INFO_COLUMN, article.artistInformation)
+            put(ARTICLE_INFO_COLUMN, article.articleInformation)
             put(ARTICLE_URL_COLUMN, article.articleUrl)
             put(ARTICLE_SOURCE_COLUMN, SOURCE_VALUE)
         }
