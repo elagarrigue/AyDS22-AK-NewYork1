@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.entities.Article
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
+import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
 import ayds.observer.Observable
 import ayds.observer.Subject
 
@@ -38,7 +40,7 @@ class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
         initObservers()
     }
 
-    private fun initGUI(){
+    private fun initGUI() {
         articlePane = findViewById(R.id.articlePane)
         openUrlButton = findViewById(R.id.openUrlButton)
         imageView = findViewById<View>(R.id.imageView) as ImageView
@@ -50,25 +52,38 @@ class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun updateArtistInfo(artistArticle: Article) {
-        updateUrlButton(artistArticle.articleUrl)
-        updateArtistData(artistArticle.articleInformation)
+        updateUIstate(artistArticle)
+        updateUrlButton()
+        updateArtistDescription()
     }
 
-    private fun updateUrlButton(articleUrl: String) {
-        //uiState = uiState.copy(url = artistName)
-    }
-
-    private fun updateArtistData(artistInfo: String) {
-        runOnUiThread {
-            updateDataOnView(artistInfo)
+    private fun updateUIstate(artistArticle: Article) {
+        when (artistArticle) {
+            is NYArticle -> updateUIartistInfo(artistArticle)
+            EmptyArticle -> updateUIartistInfoNotFound()
         }
     }
 
-    private fun updateDataOnView(artistDesc: String) {
-        uiState = uiState.copy(
-            //logoUrl = IMAGE_URL,
-            //artistDescription = artistDesc
-        )
+    private fun updateUIartistInfo(artistArticle: Article) {
+        //uiState = uiState.copy(artistUrl = artistArticle.articleUrl)
+        //uiState = uiState.copy(artistInfo = artistArticle.articleInformation)
+    }
+
+    private fun updateUIartistInfoNotFound() {
+        //uiState = uiState.copy(artistUrl = "")
+        //uiState = uiState.copy(artistInfo = "")
+    }
+
+    private fun updateUrlButton() {
+        runOnUiThread {
+            //openUrlButton = uiState.artistUrl
+        }
+    }
+
+    private fun updateArtistDescription() {
+        runOnUiThread {
+            //articlePane.text = uiState.artistInfo
+        }
     }
 
     private fun notifyMoreInfoAction() {
