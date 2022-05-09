@@ -14,9 +14,6 @@ import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
 import ayds.observer.Observable
 import ayds.observer.Subject
 
-private const val IMAGE_URL =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
-
 interface MoreDetailsView {
     val uiEventObservable: Observable<MoreDetailsUiEvent>
     val uiState: MoreDetailsUiState
@@ -38,7 +35,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         initInjector()
-        initGUI()
+        initProperties()
         initObservers()
     }
 
@@ -47,7 +44,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         moreDetailsModel = MoreDetailsModelInjector.getMoreDetailsModel()
     }
 
-    private fun initGUI() {
+    private fun initProperties() {
         articlePane = findViewById(R.id.articlePane)
         openUrlButton = findViewById(R.id.openUrlButton)
         imageView = findViewById<View>(R.id.imageView) as ImageView
