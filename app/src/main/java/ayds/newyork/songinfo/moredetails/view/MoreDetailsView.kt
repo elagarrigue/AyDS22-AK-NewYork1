@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
+import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 import ayds.newyork.songinfo.moredetails.model.entities.Article
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
 import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
@@ -21,7 +22,7 @@ interface MoreDetailsView {
     val uiState: MoreDetailsUiState
 }
 
-class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
+class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
 
@@ -36,8 +37,14 @@ class MoreDetailsViewImpl : AppCompatActivity(), MoreDetailsView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
+        initInjector()
         initGUI()
         initObservers()
+    }
+
+    private fun initInjector() {
+        MoreDetailsViewInjector.init(this)
+        moreDetailsModel = MoreDetailsModelInjector.getMoreDetailsModel()
     }
 
     private fun initGUI() {
