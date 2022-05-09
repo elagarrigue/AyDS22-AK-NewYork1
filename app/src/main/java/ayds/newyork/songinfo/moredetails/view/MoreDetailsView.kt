@@ -11,8 +11,13 @@ import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 import ayds.newyork.songinfo.moredetails.model.entities.Article
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
 import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
+import ayds.newyork.songinfo.utils.UtilsInjector
+import ayds.newyork.songinfo.utils.view.ImageLoader
 import ayds.observer.Observable
 import ayds.observer.Subject
+
+private const val SONG_FOUND_LOCAL = "[*]"
+private const val ARTIST_NAME = "artistName"
 
 interface MoreDetailsView {
     val uiEventObservable: Observable<MoreDetailsUiEvent>
@@ -27,6 +32,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private lateinit var openUrlButton: View
     private lateinit var imageView: ImageView
     private lateinit var moreDetailsModel: MoreDetailsModel
+    private val imageLoader: ImageLoader = UtilsInjector.imageLoader
 
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
@@ -35,8 +41,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         initInjector()
+        initArtistName()
         initProperties()
         initObservers()
+        updateSongImage()
+    }
+
+    private fun initArtistName() {
+        uiState.copy(artistName = intent.getStringExtra(ARTIST_NAME).toString())
     }
 
     private fun initInjector() {
@@ -69,13 +81,16 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun updateUIartistInfo(artistArticle: Article) {
-        //uiState = uiState.copy(artistUrl = artistArticle.articleUrl)
-        //uiState = uiState.copy(artistInfo = artistArticle.articleInformation)
+        if (artistArticle.isLocallyStored)
+            uiState.copy(artistInfo = SONG_FOUND_LOCAL + artistArticle.articleInformation)
+        else
+            uiState.copy(artistInfo = artistArticle.articleInformation)
+        uiState = uiState.copy(artistUrl = artistArticle.articleUrl)
     }
 
     private fun updateUIartistInfoNotFound() {
-        //uiState = uiState.copy(artistUrl = "")
-        //uiState = uiState.copy(artistInfo = "")
+        uiState = uiState.copy(artistUrl = "")
+        uiState = uiState.copy(artistInfo = "")
     }
 
     private fun updateUrlButton() {
@@ -86,7 +101,13 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistDescription() {
         runOnUiThread {
-            //articlePane.text = uiState.artistInfo
+            articlePane.text = uiState.artistInfo
+        }
+    }
+
+    private fun updateSongImage() {
+        runOnUiThread {
+            imageLoader.loadImageIntoView(uiState.defaultImageUrl, imageView)
         }
     }
 
