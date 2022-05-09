@@ -2,6 +2,7 @@ package ayds.newyork.songinfo.moredetails.view
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +30,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
 
     private lateinit var articlePane: TextView
-    private lateinit var openUrlButton: View
+    private lateinit var openUrlButton: Button
     private lateinit var imageView: ImageView
     private lateinit var moreDetailsModel: MoreDetailsModel
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
@@ -43,12 +44,17 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         initInjector()
         initArtistName()
         initProperties()
+        initListeners()
         initObservers()
         updateSongImage()
     }
 
+    private fun initListeners() {
+        openUrlButton.setOnClickListener { notifyMoreInfoAction() }
+    }
+
     private fun initArtistName() {
-        uiState.copy(artistName = intent.getStringExtra(ARTIST_NAME).toString())
+        uiState = uiState.copy(artistName = intent.getStringExtra(ARTIST_NAME).toString())
     }
 
     private fun initInjector() {
@@ -82,9 +88,9 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateUIartistInfo(artistArticle: Article) {
         if (artistArticle.isLocallyStored)
-            uiState.copy(artistInfo = SONG_FOUND_LOCAL + artistArticle.articleInformation)
+            uiState = uiState.copy(artistInfo = SONG_FOUND_LOCAL + artistArticle.articleInformation)
         else
-            uiState.copy(artistInfo = artistArticle.articleInformation)
+            uiState = uiState.copy(artistInfo = artistArticle.articleInformation)
         uiState = uiState.copy(artistUrl = artistArticle.articleUrl)
     }
 
@@ -112,7 +118,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun notifyMoreInfoAction() {
-        //onActionSubject.notify(MoreDetailsUiEvent.OpenInfoUrl)
+        onActionSubject.notify(MoreDetailsUiEvent.ShowInfoArticle)
     }
 
 }
