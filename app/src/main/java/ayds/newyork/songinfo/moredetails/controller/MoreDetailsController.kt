@@ -24,8 +24,13 @@ internal class MoreDetailsControllerImpl(
         Observer { value ->
             when (value) {
                 MoreDetailsUiEvent.ShowInfoArticle -> showInfoArticle()
+                MoreDetailsUiEvent.OpenMoreInfoUrl -> openMoreInfoUrl()
             }
         }
+
+    private fun openMoreInfoUrl() {
+        moreDetailsView.openExternalLink(moreDetailsView.uiState.artistUrl)
+    }
 
     private fun showInfoArticle() {
         Thread {

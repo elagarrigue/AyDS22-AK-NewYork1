@@ -13,6 +13,7 @@ import ayds.newyork.songinfo.moredetails.model.entities.Article
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
 import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
 import ayds.newyork.songinfo.utils.UtilsInjector
+import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
 import ayds.newyork.songinfo.utils.view.ImageLoader
 import ayds.observer.Observable
 import ayds.observer.Subject
@@ -23,6 +24,8 @@ private const val ARTIST_NAME = "artistName"
 interface MoreDetailsView {
     val uiEventObservable: Observable<MoreDetailsUiEvent>
     val uiState: MoreDetailsUiState
+
+    fun openExternalLink(url: String)
 }
 
 class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
@@ -38,6 +41,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
@@ -46,15 +50,12 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         initProperties()
         initListeners()
         initObservers()
+        notifyMoreInfoAction()
         updateSongImage()
     }
 
-    private fun initListeners() {
-        openUrlButton.setOnClickListener { notifyMoreInfoAction() }
-    }
-
-    private fun initArtistName() {
-        uiState = uiState.copy(artistName = intent.getStringExtra(ARTIST_NAME).toString())
+    override fun openExternalLink(url: String) {
+        navigationUtils.openExternalUrl(this, url)
     }
 
     private fun initInjector() {
@@ -62,10 +63,18 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         moreDetailsModel = MoreDetailsModelInjector.getMoreDetailsModel()
     }
 
+    private fun initArtistName() {
+        uiState = uiState.copy(artistName = intent.getStringExtra(ARTIST_NAME).toString())
+    }
+
     private fun initProperties() {
         articlePane = findViewById(R.id.articlePane)
         openUrlButton = findViewById(R.id.openUrlButton)
         imageView = findViewById<View>(R.id.imageView) as ImageView
+    }
+
+    private fun initListeners() {
+        openUrlButton.setOnClickListener { notifyOpenMoreInfoUrlAction() }
     }
 
     private fun initObservers() {
@@ -75,7 +84,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistInfo(artistArticle: Article) {
         updateUIstate(artistArticle)
-        updateUrlButton()
         updateArtistDescription()
     }
 
@@ -99,11 +107,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         uiState = uiState.copy(artistInfo = "")
     }
 
-    private fun updateUrlButton() {
-        runOnUiThread {
-            //openUrlButton = uiState.artistUrl
-        }
-    }
 
     private fun updateArtistDescription() {
         runOnUiThread {
@@ -120,5 +123,10 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun notifyMoreInfoAction() {
         onActionSubject.notify(MoreDetailsUiEvent.ShowInfoArticle)
     }
+
+    private fun notifyOpenMoreInfoUrlAction() {
+        onActionSubject.notify(MoreDetailsUiEvent.OpenMoreInfoUrl)
+    }
+
 
 }
