@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.moredetails.view
 
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -25,10 +26,6 @@ interface MoreDetailsView {
     val uiEventObservable: Observable<MoreDetailsUiEvent>
     val uiState: MoreDetailsUiState
 
-    companion object {
-        const val ARTIST_NAME_EXTRA = "artistName"
-    }
-
     fun openExternalLink(url: String)
 }
 
@@ -44,6 +41,10 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
+
+    companion object {
+        const val ARTIST_NAME_EXTRA = "artistName"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,7 +101,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateUIartistInfo(artistArticle: Article) {
         uiState =
             uiState.copy(
-                artistInfo = if (artistArticle.isLocallyStored) SONG_FOUND_LOCAL else "" + artistArticle.articleInformation,
+                artistInfo = if (artistArticle.isLocallyStored) SONG_FOUND_LOCAL else {""} + artistArticle.articleInformation,
                 artistUrl = artistArticle.articleUrl
             )
     }
@@ -114,13 +115,13 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistDescription() {
         runOnUiThread {
-            articlePane.text = uiState.artistInfo
+            articlePane.text = Html.fromHtml(uiState.artistInfo)
         }
     }
 
     private fun updateSongImage() {
         runOnUiThread {
-            imageLoader.loadImageIntoView(uiState.defaultImageUrl, imageView)
+            imageLoader.loadImageIntoView(uiState.imageUrl, imageView)
         }
     }
 
