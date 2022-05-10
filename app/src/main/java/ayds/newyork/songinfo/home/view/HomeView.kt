@@ -16,7 +16,7 @@ import ayds.newyork.songinfo.home.model.entities.EmptySong
 import ayds.newyork.songinfo.home.model.entities.Song
 import ayds.newyork.songinfo.home.model.entities.SpotifySong
 import ayds.newyork.songinfo.home.view.HomeUiState.Companion.DEFAULT_IMAGE
-import ayds.newyork.songinfo.moredetails.MoreDetailsWindow
+import ayds.newyork.songinfo.moredetails.view.MoreDetailsView
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.navigation.NavigationUtils
 import ayds.newyork.songinfo.utils.view.ImageLoader
@@ -50,8 +50,8 @@ class HomeViewActivity : AppCompatActivity(), HomeView {
     override var uiState: HomeUiState = HomeUiState()
 
     override fun navigateToOtherDetails(artistName: String) {
-        val intent = Intent(this, MoreDetailsWindow::class.java)
-        intent.putExtra(MoreDetailsWindow.ARTIST_NAME_EXTRA, artistName)
+        val intent = Intent(this, MoreDetailsView::class.java)
+        intent.putExtra(MoreDetailsView.ARTIST_NAME_EXTRA, artistName)
         startActivity(intent)
     }
 

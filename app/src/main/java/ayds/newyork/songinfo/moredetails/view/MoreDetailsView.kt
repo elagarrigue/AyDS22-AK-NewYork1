@@ -25,6 +25,10 @@ interface MoreDetailsView {
     val uiEventObservable: Observable<MoreDetailsUiEvent>
     val uiState: MoreDetailsUiState
 
+    companion object {
+        const val ARTIST_NAME_EXTRA = "artistName"
+    }
+
     fun openExternalLink(url: String)
 }
 
@@ -40,7 +44,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,18 +98,19 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun updateUIartistInfo(artistArticle: Article) {
-        if (artistArticle.isLocallyStored)
-            uiState = uiState.copy(artistInfo = SONG_FOUND_LOCAL + artistArticle.articleInformation)
-        else
-            uiState = uiState.copy(artistInfo = artistArticle.articleInformation)
-        uiState = uiState.copy(artistUrl = artistArticle.articleUrl)
+        uiState =
+            uiState.copy(
+                artistInfo = if (artistArticle.isLocallyStored) SONG_FOUND_LOCAL else "" + artistArticle.articleInformation,
+                artistUrl = artistArticle.articleUrl
+            )
     }
 
     private fun updateUIartistInfoNotFound() {
-        uiState = uiState.copy(artistUrl = "")
-        uiState = uiState.copy(artistInfo = "")
+        uiState = uiState.copy(
+            artistUrl = "",
+            artistInfo = ""
+        )
     }
-
 
     private fun updateArtistDescription() {
         runOnUiThread {
