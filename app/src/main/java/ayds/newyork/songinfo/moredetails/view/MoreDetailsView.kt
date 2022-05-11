@@ -87,18 +87,18 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun updateArtistInfo(artistArticle: Article) {
-        updateUIstate(artistArticle)
+        updateUIState(artistArticle)
         updateArtistDescription()
     }
 
-    private fun updateUIstate(artistArticle: Article) {
+    private fun updateUIState(artistArticle: Article) {
         when (artistArticle) {
-            is NYArticle -> updateUIartistInfo(artistArticle)
-            EmptyArticle -> updateUIartistInfoNotFound()
+            is NYArticle -> updateUIArtistInfo(artistArticle)
+            EmptyArticle -> updateUIArtistInfoNotFound()
         }
     }
 
-    private fun updateUIartistInfo(artistArticle: Article) {
+    private fun updateUIArtistInfo(artistArticle: Article) {
         uiState =
             uiState.copy(
                 artistInfo = if (artistArticle.isLocallyStored) SONG_FOUND_LOCAL else {""} + artistArticle.articleInformation,
@@ -106,7 +106,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             )
     }
 
-    private fun updateUIartistInfoNotFound() {
+    private fun updateUIArtistInfoNotFound() {
         uiState = uiState.copy(
             artistUrl = "",
             artistInfo = ""
