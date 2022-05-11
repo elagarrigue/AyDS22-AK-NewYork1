@@ -38,6 +38,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private lateinit var imageView: ImageView
     private lateinit var moreDetailsModel: MoreDetailsModel
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
+    private val articleDescriptionHelper: ArticleDescriptionHelper =
+        MoreDetailsViewInjector.articleDescriptionHelper
 
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
@@ -117,7 +119,9 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistDescription() {
         runOnUiThread {
-            articlePane.text = Html.fromHtml(uiState.artistInfo)
+            val articleFormatted =
+                articleDescriptionHelper.textToHtml(uiState.artistInfo, uiState.artistName)
+            articlePane.text = Html.fromHtml(articleFormatted)
         }
     }
 

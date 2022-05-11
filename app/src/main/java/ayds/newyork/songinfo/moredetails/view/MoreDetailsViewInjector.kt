@@ -4,7 +4,7 @@ import ayds.newyork.songinfo.moredetails.controller.MoreDetailsControllerInjecto
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 
 object MoreDetailsViewInjector {
-
+    val articleDescriptionHelper: ArticleDescriptionHelper = ArticleDescriptionHelperImpl()
     fun init(moreDetailsView: MoreDetailsView) {
         MoreDetailsModelInjector.initMoreDetailsModel(moreDetailsView)
         MoreDetailsControllerInjector.onViewStarted(moreDetailsView)
