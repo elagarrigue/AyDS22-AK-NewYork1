@@ -101,7 +101,9 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateUIArtistInfo(artistArticle: Article) {
         uiState =
             uiState.copy(
-                artistInfo = if (artistArticle.isLocallyStored) SONG_FOUND_LOCAL else {""} + artistArticle.articleInformation,
+                artistInfo = if (artistArticle.isLocallyStored) SONG_FOUND_LOCAL else {
+                    ""
+                } + artistArticle.articleInformation,
                 artistUrl = artistArticle.articleUrl
             )
     }

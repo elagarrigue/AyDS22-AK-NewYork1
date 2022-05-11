@@ -19,7 +19,10 @@ private const val HTML_END_TAGS = "</font></div></html>"
 
 internal class JsonToInfoResolver : NYTimesToInfoResolver {
 
-    override fun getArtistInfoFromExternalData(serviceData: String?, artistName:String): NYArticle? =
+    override fun getArtistInfoFromExternalData(
+        serviceData: String?,
+        artistName: String
+    ): NYArticle? =
         try {
             serviceData?.getResponse()?.let { item ->
                 NYArticle(
@@ -40,7 +43,7 @@ internal class JsonToInfoResolver : NYTimesToInfoResolver {
         return textToHtml(getCleanAbstract(), artistName)
     }
 
-    private fun JsonObject.getCleanAbstract():String{
+    private fun JsonObject.getCleanAbstract(): String {
         val abstract = this[DOCS].asJsonArray[0].asJsonObject[ABSTRACT]
         return abstract.asString.replace("\\n", "\n")
     }

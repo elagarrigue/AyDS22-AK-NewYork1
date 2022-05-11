@@ -25,7 +25,7 @@ object MoreDetailsModelInjector {
         val nyInfoService: NYInfoService = NYInjector.nyInfoService
 
         val repository: ArticleRepository =
-            ArticleRepositoryImpl(nyInfoService,nyLocalStorage)
+            ArticleRepositoryImpl(nyInfoService, nyLocalStorage)
 
         moreDetailsModel = MoreDetailsModelImpl(repository)
     }

@@ -7,8 +7,8 @@ interface CursorToArticleMapper {
     fun map(cursor: Cursor): NYArticle?
 }
 
-internal class CursorToArticleMapperImpl : CursorToArticleMapper{
-    override fun map(cursor: Cursor): NYArticle?  {
+internal class CursorToArticleMapperImpl : CursorToArticleMapper {
+    override fun map(cursor: Cursor): NYArticle? {
         with(cursor) {
             return if (moveToNext()) {
                 NYArticle(
@@ -19,6 +19,6 @@ internal class CursorToArticleMapperImpl : CursorToArticleMapper{
                 null
             }
 
+        }
     }
-}
 }

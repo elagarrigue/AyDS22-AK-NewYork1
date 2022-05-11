@@ -5,7 +5,7 @@ import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 
 object MoreDetailsViewInjector {
 
-    fun init(moreDetailsView: MoreDetailsView){
+    fun init(moreDetailsView: MoreDetailsView) {
         MoreDetailsModelInjector.initMoreDetailsModel(moreDetailsView)
         MoreDetailsControllerInjector.onViewStarted(moreDetailsView)
     }

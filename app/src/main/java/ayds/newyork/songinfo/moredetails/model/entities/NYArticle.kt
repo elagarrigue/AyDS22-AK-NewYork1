@@ -11,14 +11,14 @@ data class NYArticle(
     override val articleInformation: String,
     override val articleUrl: String,
     override val source: Int = 1,
-    override var isLocallyStored: Boolean=false
+    override var isLocallyStored: Boolean = false
 ) : Article
 
-object EmptyArticle: Article{
-    override val articleInformation: String=""
+object EmptyArticle : Article {
+    override val articleInformation: String = ""
     override val articleUrl: String = ""
     override val source: Int = -1
-    override var isLocallyStored: Boolean=false
+    override var isLocallyStored: Boolean = false
 
 }
 
