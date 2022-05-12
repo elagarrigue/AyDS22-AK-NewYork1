@@ -20,7 +20,6 @@ import ayds.observer.Observable
 import ayds.observer.Subject
 
 const val SONG_FOUND_LOCAL = "[*]"
-private const val ARTIST_NAME = "artistName"
 
 interface MoreDetailsView {
     val uiEventObservable: Observable<MoreDetailsUiEvent>
@@ -45,7 +44,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
 
     companion object {
-        const val ARTIST_NAME_EXTRA = "artistName"
+        const val ARTIST_NAME = "artistName"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
