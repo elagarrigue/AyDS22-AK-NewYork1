@@ -1,12 +1,12 @@
 package ayds.newyork.songinfo.moredetails.view
 
 import android.os.Bundle
-import android.text.Html
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
@@ -19,7 +19,7 @@ import ayds.newyork.songinfo.utils.view.ImageLoader
 import ayds.observer.Observable
 import ayds.observer.Subject
 
-private const val SONG_FOUND_LOCAL = "[*]"
+const val SONG_FOUND_LOCAL = "[*]"
 private const val ARTIST_NAME = "artistName"
 
 interface MoreDetailsView {
@@ -90,7 +90,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistInfo(artistArticle: Article) {
         updateUIState(artistArticle)
-        updateArtistDescription()
+        updateArtistDescription(artistArticle)
     }
 
     private fun updateUIState(artistArticle: Article) {
@@ -101,13 +101,10 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun updateUIArtistInfo(artistArticle: Article) {
-        uiState =
-            uiState.copy(
-                artistInfo = if (artistArticle.isLocallyStored) SONG_FOUND_LOCAL else {
-                    ""
-                } + artistArticle.articleInformation,
-                artistUrl = artistArticle.articleUrl
-            )
+        uiState = uiState.copy(
+            artistInfo = artistArticle.articleInformation,
+            artistUrl = artistArticle.articleUrl
+        )
     }
 
     private fun updateUIArtistInfoNotFound() {
@@ -117,11 +114,12 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         )
     }
 
-    private fun updateArtistDescription() {
+    private fun updateArtistDescription(artistArticle: Article) {
         runOnUiThread {
             val articleFormatted =
-                articleDescriptionHelper.textToHtml(uiState.artistInfo, uiState.artistName)
-            articlePane.text = Html.fromHtml(articleFormatted)
+                articleDescriptionHelper.textToHtml(artistArticle, uiState.artistName)
+            articlePane.text =
+                HtmlCompat.fromHtml(articleFormatted, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
 
