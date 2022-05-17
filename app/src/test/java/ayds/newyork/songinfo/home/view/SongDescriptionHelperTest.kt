@@ -22,13 +22,13 @@ class SongDescriptionHelperTest {
             DatePrecision.DAY,
             "url",
             "imageURL",
+            isLocallyStored = true
         )
 
         val result = songDescriptionHelper.getSongDescriptionText(song)
 
         val expected =
-            // TODO la applicacion deberia volver Plush [*]?
-            "Song: Plush \n" +
+            "Song: Plush [*]\n" +
                     "Artist: Stone Temple Pilots\n" +
                     "Album: Core\n" +
                     "ReleaseDate: 01/01/1992"
