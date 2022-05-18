@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
@@ -112,8 +113,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistDescription(artistArticle: Article) {
         runOnUiThread {
-            articlePane.text =
-                articleDescriptionHelper.textToHtml(artistArticle, uiState.artistName)
+            val htmlText = articleDescriptionHelper.textToHtml(artistArticle, uiState.artistName)
+            articlePane.text = HtmlCompat.fromHtml(htmlText, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
 
