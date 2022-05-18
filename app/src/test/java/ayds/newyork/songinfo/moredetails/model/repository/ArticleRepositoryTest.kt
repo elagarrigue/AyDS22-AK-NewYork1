@@ -1,9 +1,7 @@
-package ayds.newyork.songinfo.moreDetails.model.repository
+package ayds.newyork.songinfo.moredetails.model.repository
 
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
 import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
-import ayds.newyork.songinfo.moredetails.model.repository.ArticleRepository
-import ayds.newyork.songinfo.moredetails.model.repository.ArticleRepositoryImpl
 import ayds.newyork.songinfo.moredetails.model.repository.external.NYInfoService
 import ayds.newyork.songinfo.moredetails.model.repository.local.NYLocalStorage
 import io.mockk.every
@@ -47,7 +45,6 @@ class ArticleRepositoryTest {
         val article = NYArticle("articleInformation", "articleURL", 1 )
         every { nyLocalStorage.getArtistInfo("artistName") } returns null
         every { nyInfoService.getArtistInfo("artistName") } returns article
-        every { nyLocalStorage.getArtistInfo("artistName") } returns null
 
         val result = articleRepository.getArticleByArtistName("artistName")
 

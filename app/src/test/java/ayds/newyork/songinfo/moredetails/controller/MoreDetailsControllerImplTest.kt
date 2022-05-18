@@ -1,12 +1,10 @@
-package ayds.newyork.songinfo.moreDetails.controller
+package ayds.newyork.songinfo.moredetails.controller
 
-import ayds.newyork.songinfo.moredetails.controller.MoreDetailsControllerImpl
+
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
-import ayds.newyork.songinfo.moredetails.model.entities.Article
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsUiEvent
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsUiState
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsView
-import ayds.observer.Observer
 import ayds.observer.Subject
 import io.mockk.every
 import io.mockk.mockk
