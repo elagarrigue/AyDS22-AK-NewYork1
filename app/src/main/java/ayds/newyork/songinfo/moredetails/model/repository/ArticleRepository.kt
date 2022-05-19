@@ -26,7 +26,7 @@ internal class ArticleRepositoryImpl(
                     article = nyInfoService.getArtistInfo(artistName)
 
                     article?.let {
-                        nyLocalStorage.saveArtist(artistName, it)
+                        nyLocalStorage.saveArtistInfo(artistName, it)
                     }
                 } catch (e: Exception) {
                     article = null

@@ -31,7 +31,7 @@ class ArticleRepositoryTest {
 
     @Test
     fun `given existing article should return article and mark it as local`() {
-        val article = NYArticle("articleInformation", "articleURL", 0)
+        val article = NYArticle("articleInformation", "articleURL")
         every { nyLocalStorage.getArtistInfo("artistName") } returns article
 
         val result = articleRepository.getArticleByArtistName("artistName")
@@ -42,7 +42,7 @@ class ArticleRepositoryTest {
 
     @Test
     fun `given non existing article should get the article and store it`() {
-        val article = NYArticle("articleInformation", "articleURL", 1 )
+        val article = NYArticle("articleInformation", "articleURL")
         every { nyLocalStorage.getArtistInfo("artistName") } returns null
         every { nyInfoService.getArtistInfo("artistName") } returns article
 
@@ -50,7 +50,7 @@ class ArticleRepositoryTest {
 
         assertEquals(article, result)
         assertFalse(article.isLocallyStored)
-        verify { nyLocalStorage.saveArtist("artistName", article) }
+        verify { nyLocalStorage.saveArtistInfo("artistName", article) }
     }
 
 

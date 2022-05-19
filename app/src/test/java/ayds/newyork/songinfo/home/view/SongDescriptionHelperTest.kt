@@ -47,6 +47,7 @@ class SongDescriptionHelperTest {
             DatePrecision.DAY,
             "url",
             "imageUrl",
+            isLocallyStored = false
         )
 
         val result = songDescriptionHelper.getSongDescriptionText(song)
