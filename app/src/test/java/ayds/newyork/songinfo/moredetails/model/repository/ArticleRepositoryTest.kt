@@ -11,6 +11,8 @@ import org.junit.Assert.*
 import org.junit.Test
 import java.lang.Exception
 
+private const val ARTIST_NAME = "artistName"
+
 class ArticleRepositoryTest {
 
     private val nyInfoService: NYInfoService = mockk(relaxUnitFun = true)
@@ -22,9 +24,9 @@ class ArticleRepositoryTest {
 
     @Test
     fun `given non existing article should return empty Article`() {
-        every { nyLocalStorage.getArtistInfo("artistName") } returns null
+        every { nyLocalStorage.getArtistInfo(ARTIST_NAME) } returns null
 
-        val result = articleRepository.getArticleByArtistName("artistName")
+        val result = articleRepository.getArticleByArtistName(ARTIST_NAME)
 
         assertEquals(EmptyArticle, result)
     }
@@ -32,9 +34,9 @@ class ArticleRepositoryTest {
     @Test
     fun `given existing article should return article and mark it as local`() {
         val article = NYArticle("articleInformation", "articleURL")
-        every { nyLocalStorage.getArtistInfo("artistName") } returns article
+        every { nyLocalStorage.getArtistInfo(ARTIST_NAME) } returns article
 
-        val result = articleRepository.getArticleByArtistName("artistName")
+        val result = articleRepository.getArticleByArtistName(ARTIST_NAME)
 
         assertEquals(article, result)
         assertTrue(article.isLocallyStored)
@@ -43,23 +45,23 @@ class ArticleRepositoryTest {
     @Test
     fun `given non existing article should get the article and store it`() {
         val article = NYArticle("articleInformation", "articleURL")
-        every { nyLocalStorage.getArtistInfo("artistName") } returns null
-        every { nyInfoService.getArtistInfo("artistName") } returns article
+        every { nyLocalStorage.getArtistInfo(ARTIST_NAME) } returns null
+        every { nyInfoService.getArtistInfo(ARTIST_NAME) } returns article
 
-        val result = articleRepository.getArticleByArtistName("artistName")
+        val result = articleRepository.getArticleByArtistName(ARTIST_NAME)
 
         assertEquals(article, result)
         assertFalse(article.isLocallyStored)
-        verify { nyLocalStorage.saveArtistInfo("artistName", article) }
+        verify { nyLocalStorage.saveArtistInfo(ARTIST_NAME, article) }
     }
 
 
     @Test
     fun `given service exception should return empty article`() {
-        every { nyLocalStorage.getArtistInfo("artistName") } returns null
-        every { nyInfoService.getArtistInfo("artistName") } throws mockk<Exception>()
+        every { nyLocalStorage.getArtistInfo(ARTIST_NAME) } returns null
+        every { nyInfoService.getArtistInfo(ARTIST_NAME) } throws mockk<Exception>()
 
-        val result = articleRepository.getArticleByArtistName("artistName")
+        val result = articleRepository.getArticleByArtistName(ARTIST_NAME)
 
         assertEquals(EmptyArticle, result)
     }
