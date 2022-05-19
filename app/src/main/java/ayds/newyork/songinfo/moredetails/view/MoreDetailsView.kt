@@ -11,8 +11,6 @@ import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 import ayds.newyork.songinfo.moredetails.model.entities.Article
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
-import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
 import ayds.newyork.songinfo.utils.view.ImageLoader
@@ -86,28 +84,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun updateArtistInfo(artistArticle: Article) {
-        updateUIState(artistArticle)
+        updateUIArtistInfo(artistArticle)
         updateArtistDescription(artistArticle)
-    }
-
-    private fun updateUIState(artistArticle: Article) {
-        when (artistArticle) {
-            is NYArticle -> updateUIArtistInfo(artistArticle)
-            EmptyArticle -> updateUIArtistInfoNotFound()
-        }
     }
 
     private fun updateUIArtistInfo(artistArticle: Article) {
         uiState = uiState.copy(
             artistInfo = artistArticle.articleInformation,
             artistUrl = artistArticle.articleUrl
-        )
-    }
-
-    private fun updateUIArtistInfoNotFound() {
-        uiState = uiState.copy(
-            artistUrl = "",
-            artistInfo = ""
         )
     }
 
