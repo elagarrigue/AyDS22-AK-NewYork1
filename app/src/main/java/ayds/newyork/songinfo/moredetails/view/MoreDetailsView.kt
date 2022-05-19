@@ -100,7 +100,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
              with(articleDescriptionHelper.textToHtml(artistArticle, uiState.artistName)) {
                 articlePane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
             }
-            articlePane.text = HtmlCompat.fromHtml(htmlText, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
 
