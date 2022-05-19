@@ -97,7 +97,9 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistDescription(artistArticle: Article) {
         runOnUiThread {
-            val htmlText = articleDescriptionHelper.textToHtml(artistArticle, uiState.artistName)
+             with(articleDescriptionHelper.textToHtml(artistArticle, uiState.artistName)) {
+                articlePane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            }
             articlePane.text = HtmlCompat.fromHtml(htmlText, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
