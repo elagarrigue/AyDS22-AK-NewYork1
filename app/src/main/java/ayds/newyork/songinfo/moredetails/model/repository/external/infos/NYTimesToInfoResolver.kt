@@ -23,8 +23,11 @@ internal class JsonToInfoResolver : NYTimesToInfoResolver {
         try {
             serviceData?.getResponse()?.let { item ->
                 NYArticle(
-                    item.getArtistInformation(artistName),
-                    item.getUrl()
+                    item.getArtistInformation(),
+                    item.getUrl(),
+                    1,
+                    false,
+                    artistName
                 )
             }
         } catch (e: Exception) {
@@ -36,7 +39,7 @@ internal class JsonToInfoResolver : NYTimesToInfoResolver {
         return infoJson[RESPONSE].asJsonObject
     }
 
-    private fun JsonObject.getArtistInformation(artistName: String): String {
+    private fun JsonObject.getArtistInformation(): String {
         val abstract = this[DOCS].asJsonArray[0].asJsonObject[ABSTRACT]
         return abstract.asString.replace("\\n", "\n")
     }

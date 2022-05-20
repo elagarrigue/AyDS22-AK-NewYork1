@@ -5,13 +5,15 @@ interface Article {
     val articleUrl: String
     val source: Int
     var isLocallyStored: Boolean
+    val artistName: String
 }
 
 data class NYArticle(
     override val articleInformation: String,
     override val articleUrl: String,
     override val source: Int = 1,
-    override var isLocallyStored: Boolean = false
+    override var isLocallyStored: Boolean = false,
+    override val artistName: String
 ) : Article
 
 object EmptyArticle : Article {
@@ -19,6 +21,6 @@ object EmptyArticle : Article {
     override val articleUrl: String = ""
     override val source: Int = -1
     override var isLocallyStored: Boolean = false
-
+    override val artistName: String = ""
 }
 

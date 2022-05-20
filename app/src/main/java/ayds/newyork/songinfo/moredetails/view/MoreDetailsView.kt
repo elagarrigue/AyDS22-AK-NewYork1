@@ -97,7 +97,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistDescription(artistArticle: Article) {
         runOnUiThread {
-             with(articleDescriptionHelper.textToHtml(artistArticle, uiState.artistName)) {
+             with(articleDescriptionHelper.textToHtml(artistArticle)) {
                 articlePane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
             }
         }
@@ -116,6 +116,5 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun notifyOpenMoreInfoUrlAction() {
         onActionSubject.notify(MoreDetailsUiEvent.OpenMoreInfoUrl)
     }
-
 
 }

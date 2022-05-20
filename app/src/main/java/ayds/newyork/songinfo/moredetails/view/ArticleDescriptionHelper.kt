@@ -5,7 +5,7 @@ import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
 import java.lang.StringBuilder
 
 interface ArticleDescriptionHelper {
-    fun textToHtml(article: Article, artistName: String): String
+    fun textToHtml(article: Article): String
 }
 
 private const val SONG_FOUND_LOCAL = "[*]"
@@ -16,19 +16,19 @@ private const val ARTICLE_NOT_FOUND = "article not found"
 
 
 internal class ArticleDescriptionHelperImpl : ArticleDescriptionHelper {
-    override fun textToHtml(article: Article, artistName: String): String =
+    override fun textToHtml(article: Article): String =
         when (article) {
-            is NYArticle -> getFormattedArticleText(article, artistName)
+            is NYArticle -> getFormattedArticleText(article)
             else -> getArticleNotFoundText()
         }
 
-    private fun getFormattedArticleText(article: Article, artistName: String): String =
+    private fun getFormattedArticleText(article: Article): String =
         StringBuilder().apply {
             append(HTML_DIV_WIDTH)
             append(HTML_FONT)
             if (article.isLocallyStored)
                 append(SONG_FOUND_LOCAL)
-            append(formatTextToHtmlWithBoldTerm(article.articleInformation, artistName))
+            append(formatTextToHtmlWithBoldTerm(article.articleInformation, article.artistName))
             append(HTML_END_TAGS)
         }.toString()
 
