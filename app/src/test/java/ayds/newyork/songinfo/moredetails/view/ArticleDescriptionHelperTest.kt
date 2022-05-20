@@ -21,12 +21,11 @@ class ArticleDescriptionHelperTest {
             "reactions of kin of freed Amers",
             "url",
             1,
-            true
+            true,
+            "Patricio Rey y sus Redonditos de Ricota"
         )
 
-        val artistName = "Patricio Rey y sus Redonditos de Ricota"
-
-        var result = articleDescriptionHelper.textToHtml(article, artistName)
+        var result = articleDescriptionHelper.textToHtml(article)
         result = result.replace(HTML_DIV_WIDTH, "")
         result = result.replace(HTML_FONT, "")
         result = result.replace(HTML_END_TAGS, "")
@@ -47,12 +46,11 @@ class ArticleDescriptionHelperTest {
             articleDescription,
             "url",
             1,
-            false
+            false,
+            "Gustavo Cerati"
         )
 
-        val artistName = "Gustavo Cerati"
-
-        var result = articleDescriptionHelper.textToHtml(article, artistName)
+        var result = articleDescriptionHelper.textToHtml(article)
         result = result.replace(HTML_DIV_WIDTH, "")
         result = result.replace(HTML_FONT, "")
         result = result.replace(HTML_END_TAGS, "")
@@ -71,13 +69,13 @@ class ArticleDescriptionHelperTest {
             articleDescription,
             "url",
             1,
-            false
+            false,
+            "Gustavo Cerati"
         )
 
-        val artistName = "Gustavo Cerati"
         val expected = HTML_DIV_WIDTH + HTML_FONT + articleDescription + HTML_END_TAGS
 
-        val result = articleDescriptionHelper.textToHtml(article, artistName)
+        val result = articleDescriptionHelper.textToHtml(article)
 
         Assert.assertEquals(expected, result)
     }
@@ -91,14 +89,14 @@ class ArticleDescriptionHelperTest {
             articleDescription,
             "url",
             1,
-            true
+            true,
+            "Gustavo Cerati"
         )
 
-        val artistName = "Gustavo Cerati"
         val expected =
             HTML_DIV_WIDTH + HTML_FONT + SONG_FOUND_LOCAL + articleDescription + HTML_END_TAGS
 
-        val result = articleDescriptionHelper.textToHtml(article, artistName)
+        val result = articleDescriptionHelper.textToHtml(article)
 
         Assert.assertEquals(expected, result)
     }
@@ -107,7 +105,7 @@ class ArticleDescriptionHelperTest {
     fun `given a non local article it should return the article not found description`() {
         val article: Article = mockk()
 
-        var result = articleDescriptionHelper.textToHtml(article, "")
+        var result = articleDescriptionHelper.textToHtml(article)
         result = result.replace(HTML_DIV_WIDTH, "")
         result = result.replace(HTML_FONT, "")
         result = result.replace(HTML_END_TAGS, "")
