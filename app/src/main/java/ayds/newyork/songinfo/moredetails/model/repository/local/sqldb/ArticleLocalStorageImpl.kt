@@ -30,7 +30,7 @@ internal class ArticleLocalStorageImpl(
             null,
             ARTICLE_DESC
         )
-        return cursorToArticleMapper.map(cursor, artistName)
+        return cursorToArticleMapper.map(cursor)
     }
 
     override fun saveArtistInfo(artistName: String, article: NYArticle) {
