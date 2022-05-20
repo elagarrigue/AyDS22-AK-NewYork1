@@ -20,9 +20,10 @@ class ArticleDescriptionHelperTest {
         val article: Article = NYArticle(
             "reactions of kin of freed Amers",
             "url",
+            "Patricio Rey y sus Redonditos de Ricota",
             1,
-            true,
-            "Patricio Rey y sus Redonditos de Ricota"
+            true
+
         )
 
         var result = articleDescriptionHelper.textToHtml(article)
@@ -45,9 +46,10 @@ class ArticleDescriptionHelperTest {
         val article: Article = NYArticle(
             articleDescription,
             "url",
+            "Gustavo Cerati",
             1,
-            false,
-            "Gustavo Cerati"
+            false
+
         )
 
         var result = articleDescriptionHelper.textToHtml(article)
@@ -68,9 +70,10 @@ class ArticleDescriptionHelperTest {
         val article: Article = NYArticle(
             articleDescription,
             "url",
+            "Gustavo Cerati",
             1,
-            false,
-            "Gustavo Cerati"
+            false
+
         )
 
         val expected = HTML_DIV_WIDTH + HTML_FONT + articleDescription + HTML_END_TAGS
@@ -88,9 +91,10 @@ class ArticleDescriptionHelperTest {
         val article: Article = NYArticle(
             articleDescription,
             "url",
+            "Gustavo Cerati",
             1,
             true,
-            "Gustavo Cerati"
+
         )
 
         val expected =

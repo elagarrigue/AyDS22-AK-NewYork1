@@ -3,7 +3,6 @@ package ayds.newyork.songinfo.moredetails.model.repository.external.infos
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
-import java.lang.StringBuilder
 
 interface NYTimesToInfoResolver {
     fun getArtistInfoFromExternalData(serviceData: String?, artistName: String): NYArticle?
@@ -25,9 +24,7 @@ internal class JsonToInfoResolver : NYTimesToInfoResolver {
                 NYArticle(
                     item.getArtistInformation(),
                     item.getUrl(),
-                    1,
-                    false,
-                    artistName
+                    artistName,
                 )
             }
         } catch (e: Exception) {
