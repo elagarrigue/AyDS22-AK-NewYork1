@@ -10,28 +10,35 @@ private const val HTML_DIV_WIDTH = "<html><div width=400>"
 private const val HTML_FONT = "<font face=\"arial\">"
 private const val HTML_END_TAGS = "</font></div></html>"
 private const val SONG_FOUND_LOCAL = "[*]"
+private const val ARTICLE_DESCRIPTION = "reactions of kin of freed Amers"
+private const val ARTICLE_URL = "url"
+private const val ARTIST_NAME_ARTICLE = "Patricio Rey y sus Redonditos de Ricota"
+private const val SOURCE = 1
 
 class ArticleDescriptionHelperTest {
+
     private val articleDescriptionHelper by lazy { ArticleDescriptionHelperImpl() }
+    private val storedArticle = NYArticle(
+        ARTICLE_DESCRIPTION,
+        ARTICLE_URL,
+        ARTIST_NAME_ARTICLE,
+        SOURCE,
+        true
+    )
+    private val nonStoredArticle = NYArticle(
+        ARTICLE_DESCRIPTION,
+        ARTICLE_URL,
+        ARTIST_NAME_ARTICLE,
+        SOURCE,
+        false
+    )
 
     @Test
     fun `given a local article it should return the description`() {
 
-        val article: Article = NYArticle(
-            "reactions of kin of freed Amers",
-            "url",
-            "Patricio Rey y sus Redonditos de Ricota",
-            1,
-            true
+        val result = noHtmlFormat(articleDescriptionHelper.textToHtml(storedArticle))
 
-        )
-
-        var result = articleDescriptionHelper.textToHtml(article)
-        result = result.replace(HTML_DIV_WIDTH, "")
-        result = result.replace(HTML_FONT, "")
-        result = result.replace(HTML_END_TAGS, "")
-
-        val expected = "[*]reactions of kin of freed Amers"
+        val expected = "[*]$ARTICLE_DESCRIPTION"
 
         Assert.assertEquals(expected, result)
 
@@ -40,82 +47,48 @@ class ArticleDescriptionHelperTest {
     @Test
     fun `given a non local article it should return the description`() {
 
-        val articleDescription = "Mr Cerati had platinum success in " +
-                "the Spanish rock and pop world and worked " +
-                "with artist like Shakira"
-        val article: Article = NYArticle(
-            articleDescription,
-            "url",
-            "Gustavo Cerati",
-            1,
-            false
+        val result = noHtmlFormat(articleDescriptionHelper.textToHtml(nonStoredArticle))
 
-        )
-
-        var result = articleDescriptionHelper.textToHtml(article)
-        result = result.replace(HTML_DIV_WIDTH, "")
-        result = result.replace(HTML_FONT, "")
-        result = result.replace(HTML_END_TAGS, "")
-
-        Assert.assertEquals(articleDescription, result)
+        Assert.assertEquals(ARTICLE_DESCRIPTION, result)
 
     }
 
     @Test
     fun `given a non local article it should return the description with correct format`() {
 
-        val articleDescription = "Mr Cerati had platinum success in " +
-                "the Spanish rock and pop world and worked " +
-                "with artist like Shakira"
-        val article: Article = NYArticle(
-            articleDescription,
-            "url",
-            "Gustavo Cerati",
-            1,
-            false
+        val expected = HTML_DIV_WIDTH + HTML_FONT + ARTICLE_DESCRIPTION + HTML_END_TAGS
 
-        )
-
-        val expected = HTML_DIV_WIDTH + HTML_FONT + articleDescription + HTML_END_TAGS
-
-        val result = articleDescriptionHelper.textToHtml(article)
+        val result = articleDescriptionHelper.textToHtml(nonStoredArticle)
 
         Assert.assertEquals(expected, result)
     }
 
     @Test
     fun `given a local article it should return the description with correct format`() {
-        val articleDescription = "Mr Cerati had platinum success in " +
-                "the Spanish rock and pop world and worked " +
-                "with artist like Shakira"
-        val article: Article = NYArticle(
-            articleDescription,
-            "url",
-            "Gustavo Cerati",
-            1,
-            true,
-
-        )
 
         val expected =
-            HTML_DIV_WIDTH + HTML_FONT + SONG_FOUND_LOCAL + articleDescription + HTML_END_TAGS
+            HTML_DIV_WIDTH + HTML_FONT + SONG_FOUND_LOCAL + ARTICLE_DESCRIPTION + HTML_END_TAGS
 
-        val result = articleDescriptionHelper.textToHtml(article)
+        val result = articleDescriptionHelper.textToHtml(storedArticle)
 
         Assert.assertEquals(expected, result)
     }
 
     @Test
     fun `given a non local article it should return the article not found description`() {
+
         val article: Article = mockk()
 
-        var result = articleDescriptionHelper.textToHtml(article)
-        result = result.replace(HTML_DIV_WIDTH, "")
-        result = result.replace(HTML_FONT, "")
-        result = result.replace(HTML_END_TAGS, "")
+        val result = noHtmlFormat(articleDescriptionHelper.textToHtml(article))
 
         val expected = "article not found"
 
         Assert.assertEquals(expected, result)
+    }
+
+    private fun noHtmlFormat(text: String): String {
+        var result = text.replace(HTML_DIV_WIDTH, "")
+        result = result.replace(HTML_FONT, "")
+        return result.replace(HTML_END_TAGS, "")
     }
 }
