@@ -3,7 +3,6 @@ package ayds.newyork.songinfo.moredetails.model.repository.external.infos
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
-import java.lang.StringBuilder
 
 interface NYTimesToInfoResolver {
     fun getArtistInfoFromExternalData(serviceData: String?, artistName: String): NYArticle?
@@ -23,8 +22,9 @@ internal class JsonToInfoResolver : NYTimesToInfoResolver {
         try {
             serviceData?.getResponse()?.let { item ->
                 NYArticle(
-                    item.getArtistInformation(artistName),
-                    item.getUrl()
+                    item.getArtistInformation(),
+                    item.getUrl(),
+                    artistName,
                 )
             }
         } catch (e: Exception) {
@@ -36,7 +36,7 @@ internal class JsonToInfoResolver : NYTimesToInfoResolver {
         return infoJson[RESPONSE].asJsonObject
     }
 
-    private fun JsonObject.getArtistInformation(artistName: String): String {
+    private fun JsonObject.getArtistInformation(): String {
         val abstract = this[DOCS].asJsonArray[0].asJsonObject[ABSTRACT]
         return abstract.asString.replace("\\n", "\n")
     }

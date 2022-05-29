@@ -13,7 +13,8 @@ internal class CursorToArticleMapperImpl : CursorToArticleMapper {
             return if (moveToNext()) {
                 NYArticle(
                     articleInformation = getString(cursor.getColumnIndexOrThrow(ARTICLE_INFO_COLUMN)),
-                    articleUrl = getString(cursor.getColumnIndexOrThrow(ARTICLE_URL_COLUMN))
+                    articleUrl = getString(cursor.getColumnIndexOrThrow(ARTICLE_URL_COLUMN)),
+                    artistName = getString(cursor.getColumnIndexOrThrow(ARTIST_NAME_COLUMN)),
                 )
             } else {
                 null

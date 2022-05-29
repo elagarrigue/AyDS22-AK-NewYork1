@@ -6,12 +6,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 import ayds.newyork.songinfo.moredetails.model.entities.Article
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
-import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
 import ayds.newyork.songinfo.utils.view.ImageLoader
@@ -85,15 +84,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun updateArtistInfo(artistArticle: Article) {
-        updateUIState(artistArticle)
+        updateUIArtistInfo(artistArticle)
         updateArtistDescription(artistArticle)
-    }
-
-    private fun updateUIState(artistArticle: Article) {
-        when (artistArticle) {
-            is NYArticle -> updateUIArtistInfo(artistArticle)
-            EmptyArticle -> updateUIArtistInfoNotFound()
-        }
     }
 
     private fun updateUIArtistInfo(artistArticle: Article) {
@@ -103,17 +95,11 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         )
     }
 
-    private fun updateUIArtistInfoNotFound() {
-        uiState = uiState.copy(
-            artistUrl = "",
-            artistInfo = ""
-        )
-    }
-
     private fun updateArtistDescription(artistArticle: Article) {
         runOnUiThread {
-            articlePane.text =
-                articleDescriptionHelper.textToHtml(artistArticle, uiState.artistName)
+             with(articleDescriptionHelper.textToHtml(artistArticle)) {
+                articlePane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            }
         }
     }
 
@@ -130,6 +116,5 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun notifyOpenMoreInfoUrlAction() {
         onActionSubject.notify(MoreDetailsUiEvent.OpenMoreInfoUrl)
     }
-
 
 }

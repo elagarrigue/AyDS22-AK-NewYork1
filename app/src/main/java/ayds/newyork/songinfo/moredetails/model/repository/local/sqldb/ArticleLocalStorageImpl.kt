@@ -33,7 +33,7 @@ internal class ArticleLocalStorageImpl(
         return cursorToArticleMapper.map(cursor)
     }
 
-    override fun saveArtist(artistName: String, article: NYArticle) {
+    override fun saveArtistInfo(artistName: String, article: NYArticle) {
         val values = ContentValues().apply {
             put(ARTIST_NAME_COLUMN, artistName)
             put(ARTICLE_INFO_COLUMN, article.articleInformation)
