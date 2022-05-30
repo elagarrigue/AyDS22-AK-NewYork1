@@ -2,7 +2,7 @@ package ayds.newyork.songinfo.moredetails.model.repository
 
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
 import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
-import ayds.newyork.songinfo.moredetails.model.repository.external.NYInfoService
+import ayds.ak1.newyorktimes.article.external.NYInfoService
 import ayds.newyork.songinfo.moredetails.model.repository.local.NYLocalStorage
 import io.mockk.every
 import io.mockk.mockk

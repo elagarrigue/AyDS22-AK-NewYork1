@@ -3,8 +3,8 @@ package ayds.newyork.songinfo.moredetails.model
 import android.content.Context
 import ayds.newyork.songinfo.moredetails.model.repository.ArticleRepository
 import ayds.newyork.songinfo.moredetails.model.repository.ArticleRepositoryImpl
-import ayds.newyork.songinfo.moredetails.model.repository.external.NYInjector
-import ayds.newyork.songinfo.moredetails.model.repository.external.NYInfoService
+import ayds.ak1.newyorktimes.article.external.NYInjector
+import ayds.ak1.newyorktimes.article.external.NYInfoService
 import ayds.newyork.songinfo.moredetails.model.repository.local.NYLocalStorage
 import ayds.newyork.songinfo.moredetails.model.repository.local.sqldb.CursorToArticleMapperImpl
 import ayds.newyork.songinfo.moredetails.model.repository.local.sqldb.ArticleLocalStorageImpl
