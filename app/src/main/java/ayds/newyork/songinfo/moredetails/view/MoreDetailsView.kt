@@ -10,7 +10,7 @@ import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
-import ayds.newyork.songinfo.moredetails.model.entities.Article
+import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
 import ayds.newyork.songinfo.utils.view.ImageLoader
@@ -28,13 +28,13 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
 
-    private lateinit var articlePane: TextView
+    private lateinit var cardPane: TextView
     private lateinit var openUrlButton: Button
     private lateinit var imageView: ImageView
     private lateinit var moreDetailsModel: MoreDetailsModel
     private val imageLoader: ImageLoader = UtilsInjector.imageLoader
-    private val articleDescriptionHelper: ArticleDescriptionHelper =
-        MoreDetailsViewInjector.articleDescriptionHelper
+    private val articleDescriptionHelper: CardDescriptionHelper =
+        MoreDetailsViewInjector.cardDescriptionHelper
 
     override val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     override var uiState: MoreDetailsUiState = MoreDetailsUiState()
@@ -69,7 +69,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initProperties() {
-        articlePane = findViewById(R.id.articlePane)
+        cardPane = findViewById(R.id.articlePane)
         openUrlButton = findViewById(R.id.openUrlButton)
         imageView = findViewById<View>(R.id.imageView) as ImageView
     }
@@ -79,26 +79,26 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun initObservers() {
-        moreDetailsModel.articleObservable
+        moreDetailsModel.cardObservable
             .subscribe { value -> updateArtistInfo(value) }
     }
 
-    private fun updateArtistInfo(artistArticle: Article) {
-        updateUIArtistInfo(artistArticle)
-        updateArtistDescription(artistArticle)
+    private fun updateArtistInfo(artistCard: Card) {
+        updateUIArtistInfo(artistCard)
+        updateArtistDescription(artistCard)
     }
 
-    private fun updateUIArtistInfo(artistArticle: Article) {
+    private fun updateUIArtistInfo(artistCard: Card) {
         uiState = uiState.copy(
-            artistInfo = artistArticle.articleInformation,
-            artistUrl = artistArticle.articleUrl
+            artistInfo = artistCard.description,
+            artistUrl = artistCard.infoURL
         )
     }
 
-    private fun updateArtistDescription(artistArticle: Article) {
+    private fun updateArtistDescription(artistCard: Card) {
         runOnUiThread {
-             with(articleDescriptionHelper.textToHtml(artistArticle)) {
-                articlePane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
+             with(articleDescriptionHelper.textToHtml(artistCard)) {
+                cardPane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
             }
         }
     }

@@ -13,7 +13,7 @@ import java.lang.Exception
 
 private const val ARTIST_NAME = "artistName"
 
-class ArticleRepositoryTest {
+class CardRepositoryTest {
 
     private val nyInfoService: NYInfoService = mockk(relaxUnitFun = true)
     private val nyLocalStorage: NYLocalStorage = mockk(relaxUnitFun = true)

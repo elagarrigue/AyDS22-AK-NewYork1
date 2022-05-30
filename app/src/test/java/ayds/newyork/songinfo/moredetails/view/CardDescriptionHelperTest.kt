@@ -1,7 +1,7 @@
 package ayds.newyork.songinfo.moredetails.view
 
-import ayds.newyork.songinfo.moredetails.model.entities.Article
-import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
+import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
@@ -15,21 +15,23 @@ private const val ARTICLE_URL = "url"
 private const val ARTIST_NAME_ARTICLE = "Patricio Rey y sus Redonditos de Ricota"
 private const val SOURCE = 1
 
-class ArticleDescriptionHelperTest {
+class CardDescriptionHelperTest {
 
-    private val articleDescriptionHelper by lazy { ArticleDescriptionHelperImpl() }
-    private val storedArticle = NYArticle(
+    private val articleDescriptionHelper by lazy { CardDescriptionHelperImpl() }
+    private val storedArticle = FullCard(
         ARTICLE_DESCRIPTION,
         ARTICLE_URL,
         ARTIST_NAME_ARTICLE,
         SOURCE,
+        "",
         true
     )
-    private val nonStoredArticle = NYArticle(
+    private val nonStoredArticle = FullCard(
         ARTICLE_DESCRIPTION,
         ARTICLE_URL,
         ARTIST_NAME_ARTICLE,
         SOURCE,
+        "",
         false
     )
 
@@ -77,9 +79,9 @@ class ArticleDescriptionHelperTest {
     @Test
     fun `given a non local article it should return the article not found description`() {
 
-        val article: Article = mockk()
+        val card: Card = mockk()
 
-        val result = noHtmlFormat(articleDescriptionHelper.textToHtml(article))
+        val result = noHtmlFormat(articleDescriptionHelper.textToHtml(card))
 
         val expected = "article not found"
 

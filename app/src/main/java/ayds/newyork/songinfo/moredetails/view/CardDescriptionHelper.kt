@@ -1,42 +1,42 @@
 package ayds.newyork.songinfo.moredetails.view
 
-import ayds.newyork.songinfo.moredetails.model.entities.Article
-import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
+import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import java.lang.StringBuilder
 
-interface ArticleDescriptionHelper {
-    fun textToHtml(article: Article): String
+interface CardDescriptionHelper {
+    fun textToHtml(card: Card): String
 }
 
 private const val SONG_FOUND_LOCAL = "[*]"
 private const val HTML_DIV_WIDTH = "<html><div width=400>"
 private const val HTML_FONT = "<font face=\"arial\">"
 private const val HTML_END_TAGS = "</font></div></html>"
-private const val ARTICLE_NOT_FOUND = "article not found"
+private const val CARD_NOT_FOUND = "article not found"
 
 
-internal class ArticleDescriptionHelperImpl : ArticleDescriptionHelper {
-    override fun textToHtml(article: Article): String =
-        when (article) {
-            is NYArticle -> getFormattedArticleText(article)
-            else -> getArticleNotFoundText()
+internal class CardDescriptionHelperImpl : CardDescriptionHelper {
+    override fun textToHtml(card: Card): String =
+        when (card) {
+            is FullCard -> getFormattedCardText(card)
+            else -> getCardNotFoundText()
         }
 
-    private fun getFormattedArticleText(article: Article): String =
+    private fun getFormattedCardText(card: Card): String =
         StringBuilder().apply {
             append(HTML_DIV_WIDTH)
             append(HTML_FONT)
-            if (article.isLocallyStored)
+            if (card.isLocallyStored)
                 append(SONG_FOUND_LOCAL)
-            append(formatTextToHtmlWithBoldTerm(article.articleInformation, article.artistName))
+            append(formatTextToHtmlWithBoldTerm(card.description, card.artistName))
             append(HTML_END_TAGS)
         }.toString()
 
-    private fun getArticleNotFoundText(): String =
+    private fun getCardNotFoundText(): String =
         StringBuilder().apply {
             append(HTML_DIV_WIDTH)
             append(HTML_FONT)
-            append(ARTICLE_NOT_FOUND)
+            append(CARD_NOT_FOUND)
             append(HTML_END_TAGS)
         }.toString()
 

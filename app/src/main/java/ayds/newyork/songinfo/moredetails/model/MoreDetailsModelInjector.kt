@@ -1,13 +1,13 @@
 package ayds.newyork.songinfo.moredetails.model
 
 import android.content.Context
-import ayds.newyork.songinfo.moredetails.model.repository.ArticleRepository
-import ayds.newyork.songinfo.moredetails.model.repository.ArticleRepositoryImpl
+import ayds.newyork.songinfo.moredetails.model.repository.CardRepository
+import ayds.newyork.songinfo.moredetails.model.repository.CardRepositoryImpl
 import ayds.ak1.newyorktimes.article.external.NYInjector
 import ayds.ak1.newyorktimes.article.external.NYInfoService
-import ayds.newyork.songinfo.moredetails.model.repository.local.NYLocalStorage
-import ayds.newyork.songinfo.moredetails.model.repository.local.sqldb.CursorToArticleMapperImpl
-import ayds.newyork.songinfo.moredetails.model.repository.local.sqldb.ArticleLocalStorageImpl
+import ayds.newyork.songinfo.moredetails.model.repository.local.CardLocalStorage
+import ayds.newyork.songinfo.moredetails.model.repository.local.sqldb.CardLocalStorageImpl
+import ayds.newyork.songinfo.moredetails.model.repository.local.sqldb.CursorToCardMapperImpl
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsView
 
 object MoreDetailsModelInjector {
@@ -18,14 +18,14 @@ object MoreDetailsModelInjector {
 
     fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
 
-        val nyLocalStorage: NYLocalStorage = ArticleLocalStorageImpl(
-            moreDetailsView as Context, CursorToArticleMapperImpl()
+        val cardLocalStorage: CardLocalStorage = CardLocalStorageImpl(
+            moreDetailsView as Context, CursorToCardMapperImpl()
         )
 
         val nyInfoService: NYInfoService = NYInjector.nyInfoService
 
-        val repository: ArticleRepository =
-            ArticleRepositoryImpl(nyInfoService, nyLocalStorage)
+        val repository: CardRepository =
+            CardRepositoryImpl(nyInfoService, cardLocalStorage)
 
         moreDetailsModel = MoreDetailsModelImpl(repository)
     }

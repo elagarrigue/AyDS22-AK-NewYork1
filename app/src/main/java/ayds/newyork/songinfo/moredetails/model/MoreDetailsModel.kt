@@ -1,22 +1,22 @@
 package ayds.newyork.songinfo.moredetails.model
 
-import ayds.newyork.songinfo.moredetails.model.entities.Article
-import ayds.newyork.songinfo.moredetails.model.repository.ArticleRepository
+import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.repository.CardRepository
 import ayds.observer.Observable
 import ayds.observer.Subject
 
 interface MoreDetailsModel {
-    val articleObservable: Observable<Article>
+    val cardObservable: Observable<Card>
 
-    fun getInfoArticle(artistName: String)
+    fun searchCard(artistName: String)
 }
 
-internal class MoreDetailsModelImpl(private val repository: ArticleRepository) : MoreDetailsModel {
+internal class MoreDetailsModelImpl(private val repository: CardRepository) : MoreDetailsModel {
 
-    override val articleObservable = Subject<Article>()
+    override val cardObservable = Subject<Card>()
 
-    override fun getInfoArticle(artistName: String) {
-        val article = repository.getArticleByArtistName(artistName)
-        articleObservable.notify(article)
+    override fun searchCard(artistName: String) {
+        val article = repository.getCardByArtistName(artistName)
+        cardObservable.notify(article)
     }
 }

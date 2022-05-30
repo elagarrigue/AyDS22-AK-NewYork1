@@ -1,6 +1,6 @@
 package ayds.newyork.songinfo.moredetails.model
 
-import ayds.newyork.songinfo.moredetails.model.entities.Article
+import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.repository.ArticleRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -17,16 +17,16 @@ class MoreDetailsModelTest {
 
     @Test
     fun `on search article it should notify the result`() {
-        val article: Article = mockk()
-        every { repository.getArticleByArtistName("name")} returns article
-        val articleTester: (Article) -> Unit = mockk(relaxed = true)
-        moreDetailsModel.articleObservable.subscribe {
+        val card: Card = mockk()
+        every { repository.getArticleByArtistName("name")} returns card
+        val articleTester: (Card) -> Unit = mockk(relaxed = true)
+        moreDetailsModel.cardObservable.subscribe {
             articleTester(it)
         }
 
         moreDetailsModel.getInfoArticle("name")
 
-        verify { articleTester(article) }
+        verify { articleTester(card) }
     }
 
 }

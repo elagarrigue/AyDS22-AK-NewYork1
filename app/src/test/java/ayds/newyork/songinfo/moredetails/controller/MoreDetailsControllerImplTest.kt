@@ -45,7 +45,7 @@ class MoreDetailsControllerTest {
 
         onActionSubject.notify(MoreDetailsUiEvent.ShowInfoArticle)
 
-        verify { moreDetailsModel.getInfoArticle("name") }
+        verify { moreDetailsModel.searchCard("name") }
     }
 
 }
