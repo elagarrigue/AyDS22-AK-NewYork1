@@ -17,7 +17,8 @@ internal class CardLocalStorageImpl(
         CARD_ID_COLUMN,
         ARTIST_NAME_COLUMN,
         CARD_URL_COLUMN,
-        CARD_INFO_COLUMN
+        CARD_INFO_COLUMN,
+        CARD_SOURCE_COLUMN
     )
 
     override fun getCard(artistName: String): FullCard? {
@@ -38,7 +39,7 @@ internal class CardLocalStorageImpl(
             put(ARTIST_NAME_COLUMN, artistName)
             put(CARD_INFO_COLUMN, card.description)
             put(CARD_URL_COLUMN, card.infoURL)
-            put(CARD_SOURCE_COLUMN, SOURCE_VALUE)
+            put(CARD_SOURCE_COLUMN, card.source)
         }
         writableDatabase?.insert(CARDS_TABLE_NAME, null, values)
     }
