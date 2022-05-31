@@ -19,18 +19,14 @@ internal class CardRepositoryImpl(
 
     override fun getCardByArtistName(artistName: String): Card {
         var card = cardLocalStorage.getCard(artistName)
-
         when {
             card != null -> markArticleAsLocal(card)
             else -> {
                 try {
-                   val nyArtistInfo = nyInfoService.getArtistInfo(artistName)
-
-                    nyArtistInfo?.let{
-                        card=createNYInfoCard(artistName,it)
-
+                    val nyArtistInfo = nyInfoService.getArtistInfo(artistName)
+                    nyArtistInfo?.let {
+                        card = createNYInfoCard(artistName, it)
                     }
-
                     card?.let {
                         cardLocalStorage.saveCard(artistName, it)
                     }
@@ -39,12 +35,11 @@ internal class CardRepositoryImpl(
                 }
             }
         }
-
         return card ?: EmptyCard
     }
 
     private fun createNYInfoCard(artistName: String, nyArticleCard: NYArticleCard): FullCard {
-      return FullCard(
+        return FullCard(
             nyArticleCard.description,
             nyArticleCard.infoURL,
             artistName,
