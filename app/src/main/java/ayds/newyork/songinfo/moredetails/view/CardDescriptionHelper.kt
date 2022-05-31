@@ -14,6 +14,7 @@ private const val HTML_DIV_WIDTH = "<html><div width=400>"
 private const val HTML_FONT = "<font face=\"arial\">"
 private const val HTML_END_TAGS = "</font></div></html>"
 private const val CARD_NOT_FOUND = "article not found"
+private const val FUENTE ="Fuente: "
 
 
 internal class CardDescriptionHelperImpl : CardDescriptionHelper {
@@ -27,9 +28,9 @@ internal class CardDescriptionHelperImpl : CardDescriptionHelper {
         StringBuilder().apply {
             append(HTML_DIV_WIDTH)
             append(HTML_FONT)
-            append("Fuente: ")
+            append(FUENTE)
             when (card.source){
-                "NYArticle" ->append("New York Times")
+                "NYArticle" ->append(card.source)
                 else ->append("No Encontrada")
             }
 

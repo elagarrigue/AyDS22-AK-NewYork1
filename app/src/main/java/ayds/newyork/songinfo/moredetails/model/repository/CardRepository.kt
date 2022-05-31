@@ -48,10 +48,8 @@ internal class CardRepositoryImpl(
             nyArticleCard.description,
             nyArticleCard.infoURL,
             artistName,
-            nyArticleCard.source,
             nyArticleCard.sourceLogoUrl
         )
-
     }
 
     private fun markArticleAsLocal(card: FullCard) {
