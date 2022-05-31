@@ -1,6 +1,6 @@
 package ayds.newyork.songinfo.moredetails.model.repository
 
-import ayds.ak1.newyorktimes.article.external.NYArticleCard
+import ayds.ak1.newyorktimes.article.external.NYArticle
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import ayds.ak1.newyorktimes.article.external.NYInfoService
@@ -46,7 +46,7 @@ class CardRepositoryTest {
     @Test
     fun `given non existing article should get the article and store it`() {
         val articleCard = FullCard("articleInformation", "articleURL",ARTIST_NAME,"Source","sourceLogo")
-        val articleCardsExtern = NYArticleCard("articleInformation", "articleURL",ARTIST_NAME,"Source","sourceLogo")
+        val articleCardsExtern = NYArticle("articleInformation", "articleURL",ARTIST_NAME,"Source","sourceLogo")
         every { cardLocalStorage.getCard(ARTIST_NAME) } returns null
         every { nyInfoService.getArtistInfo(ARTIST_NAME) } returns articleCardsExtern
 

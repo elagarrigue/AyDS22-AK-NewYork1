@@ -1,6 +1,6 @@
 package ayds.newyork.songinfo.moredetails.model.repository
 
-import ayds.ak1.newyorktimes.article.external.NYArticleCard
+import ayds.ak1.newyorktimes.article.external.NYArticle
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
@@ -38,12 +38,12 @@ internal class CardRepositoryImpl(
         return card ?: EmptyCard
     }
 
-    private fun createNYInfoCard(artistName: String, nyArticleCard: NYArticleCard): FullCard {
+    private fun createNYInfoCard(artistName: String, nyArticle: NYArticle): FullCard {
         return FullCard(
-            nyArticleCard.description,
-            nyArticleCard.infoURL,
+            nyArticle.description,
+            nyArticle.infoURL,
             artistName,
-            nyArticleCard.logoURL
+            nyArticle.logoURL
         )
     }
 
