@@ -48,7 +48,7 @@ internal class CardRepositoryImpl(
             nyArticleCard.description,
             nyArticleCard.infoURL,
             artistName,
-            nyArticleCard.sourceLogoUrl
+            nyArticleCard.logoURL
         )
     }
 
