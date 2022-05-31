@@ -29,6 +29,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
 
     private lateinit var cardPane: TextView
+    private lateinit var sourcePane: TextView
     private lateinit var openUrlButton: Button
     private lateinit var imageView: ImageView
     private lateinit var moreDetailsModel: MoreDetailsModel
@@ -70,6 +71,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initProperties() {
         cardPane = findViewById(R.id.articlePane)
+        sourcePane = findViewById(R.id.sourcePane)
         openUrlButton = findViewById(R.id.openUrlButton)
         imageView = findViewById<View>(R.id.imageView) as ImageView
     }
@@ -86,6 +88,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateArtistInfo(artistCard: Card) {
         updateUIArtistInfo(artistCard)
         updateArtistDescription(artistCard)
+        updateSourceDescription(artistCard)
     }
 
     private fun updateUIArtistInfo(artistCard: Card) {
@@ -99,6 +102,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         runOnUiThread {
              with(articleDescriptionHelper.textToHtml(artistCard)) {
                 cardPane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            }
+        }
+    }
+
+    private fun updateSourceDescription(artistCard: Card){
+        runOnUiThread {
+            with(articleDescriptionHelper.sourceToHtml(artistCard)) {
+                sourcePane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
             }
         }
     }

@@ -6,6 +6,7 @@ import java.lang.StringBuilder
 
 interface CardDescriptionHelper {
     fun textToHtml(card: Card): String
+    fun sourceToHtml(card: Card): String
 }
 
 private const val SONG_FOUND_LOCAL = "[*]"
@@ -21,6 +22,19 @@ internal class CardDescriptionHelperImpl : CardDescriptionHelper {
             is FullCard -> getFormattedCardText(card)
             else -> getCardNotFoundText()
         }
+
+    override fun sourceToHtml(card: Card): String =
+        StringBuilder().apply {
+            append(HTML_DIV_WIDTH)
+            append(HTML_FONT)
+            append("Fuente: ")
+            when (card.source){
+                "NYArticle" ->append("New York Times")
+                else ->append("No Encontrada")
+            }
+
+            append(HTML_END_TAGS)
+        }.toString()
 
     private fun getFormattedCardText(card: Card): String =
         StringBuilder().apply {
