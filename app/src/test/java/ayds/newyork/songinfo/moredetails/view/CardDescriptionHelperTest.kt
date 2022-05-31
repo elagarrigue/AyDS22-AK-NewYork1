@@ -13,7 +13,7 @@ private const val SONG_FOUND_LOCAL = "[*]"
 private const val ARTICLE_DESCRIPTION = "reactions of kin of freed Amers"
 private const val ARTICLE_URL = "url"
 private const val ARTIST_NAME_ARTICLE = "Patricio Rey y sus Redonditos de Ricota"
-private const val SOURCE = 1
+private const val SOURCE = "Source"
 
 class CardDescriptionHelperTest {
 

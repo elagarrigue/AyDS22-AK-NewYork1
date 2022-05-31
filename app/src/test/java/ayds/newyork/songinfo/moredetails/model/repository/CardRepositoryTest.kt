@@ -1,9 +1,10 @@
 package ayds.newyork.songinfo.moredetails.model.repository
 
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyArticle
-import ayds.newyork.songinfo.moredetails.model.entities.NYArticle
+import ayds.ak1.newyorktimes.article.external.NYArticleCard
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
+import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import ayds.ak1.newyorktimes.article.external.NYInfoService
-import ayds.newyork.songinfo.moredetails.model.repository.local.NYLocalStorage
+import ayds.newyork.songinfo.moredetails.model.repository.local.CardLocalStorage
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -16,27 +17,27 @@ private const val ARTIST_NAME = "artistName"
 class CardRepositoryTest {
 
     private val nyInfoService: NYInfoService = mockk(relaxUnitFun = true)
-    private val nyLocalStorage: NYLocalStorage = mockk(relaxUnitFun = true)
+    private val cardLocalStorage: CardLocalStorage = mockk(relaxUnitFun = true)
 
-    private val articleRepository: ArticleRepository by lazy {
-        ArticleRepositoryImpl(nyInfoService, nyLocalStorage)
+    private val cardRepository: CardRepository by lazy {
+        CardRepositoryImpl(nyInfoService, cardLocalStorage)
     }
 
     @Test
     fun `given non existing article should return empty Article`() {
-        every { nyLocalStorage.getArtistInfo(ARTIST_NAME) } returns null
+        every { cardLocalStorage.getCard(ARTIST_NAME) } returns null
 
-        val result = articleRepository.getArticleByArtistName(ARTIST_NAME)
+        val result = cardRepository.getCardByArtistName(ARTIST_NAME)
 
-        assertEquals(EmptyArticle, result)
+        assertEquals(EmptyCard, result)
     }
 
     @Test
     fun `given existing article should return article and mark it as local`() {
-        val article = NYArticle("articleInformation", "articleURL", ARTIST_NAME)
-        every { nyLocalStorage.getArtistInfo(ARTIST_NAME) } returns article
+        val article = FullCard("articleInformation", "articleURL", ARTIST_NAME,"Source","sourceLogo")
+        every { cardLocalStorage.getCard(ARTIST_NAME) } returns article
 
-        val result = articleRepository.getArticleByArtistName(ARTIST_NAME)
+        val result = cardRepository.getCardByArtistName(ARTIST_NAME)
 
         assertEquals(article, result)
         assertTrue(article.isLocallyStored)
@@ -44,25 +45,26 @@ class CardRepositoryTest {
 
     @Test
     fun `given non existing article should get the article and store it`() {
-        val article = NYArticle("articleInformation", "articleURL",ARTIST_NAME)
-        every { nyLocalStorage.getArtistInfo(ARTIST_NAME) } returns null
-        every { nyInfoService.getArtistInfo(ARTIST_NAME) } returns article
+        val articleCard = FullCard("articleInformation", "articleURL",ARTIST_NAME,"Source","sourceLogo")
+        val articleCardsExtern = NYArticleCard("articleInformation", "articleURL",ARTIST_NAME,"Source","sourceLogo")
+        every { cardLocalStorage.getCard(ARTIST_NAME) } returns null
+        every { nyInfoService.getArtistInfo(ARTIST_NAME) } returns articleCardsExtern
 
-        val result = articleRepository.getArticleByArtistName(ARTIST_NAME)
+        val result = cardRepository.getCardByArtistName(ARTIST_NAME)
 
-        assertEquals(article, result)
-        assertFalse(article.isLocallyStored)
-        verify { nyLocalStorage.saveArtistInfo(ARTIST_NAME, article) }
+        assertEquals(articleCard, result)
+        assertFalse(articleCard.isLocallyStored)
+        verify { cardLocalStorage.saveCard(ARTIST_NAME, articleCard) }
     }
 
 
     @Test
     fun `given service exception should return empty article`() {
-        every { nyLocalStorage.getArtistInfo(ARTIST_NAME) } returns null
+        every { cardLocalStorage.getCard(ARTIST_NAME) } returns null
         every { nyInfoService.getArtistInfo(ARTIST_NAME) } throws mockk<Exception>()
 
-        val result = articleRepository.getArticleByArtistName(ARTIST_NAME)
+        val result = cardRepository.getCardByArtistName(ARTIST_NAME)
 
-        assertEquals(EmptyArticle, result)
+        assertEquals(EmptyCard, result)
     }
 }
