@@ -7,6 +7,7 @@ const val CARD_DESC = "artist DESC"
 const val CARD_INFO_COLUMN = "info"
 const val CARD_URL_COLUMN = "url"
 const val CARD_SOURCE_COLUMN = "source"
+const val CARD_SOURCE_LOGO_COLUMN="source logo"
 const val DATABASE_NAME = "cards.db"
 const val DATABASE_VERSION = 1
 const val createCardsTableQuery: String =
@@ -15,4 +16,5 @@ const val createCardsTableQuery: String =
             "$ARTIST_NAME_COLUMN string, " +
             "$CARD_INFO_COLUMN string, " +
             "$CARD_URL_COLUMN string, " +
-            "$CARD_SOURCE_COLUMN string)"
+            "$CARD_SOURCE_COLUMN string, " +
+            "$CARD_SOURCE_LOGO_COLUMN string)"

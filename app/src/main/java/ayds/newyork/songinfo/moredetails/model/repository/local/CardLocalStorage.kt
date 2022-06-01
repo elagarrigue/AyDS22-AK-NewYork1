@@ -6,5 +6,5 @@ interface CardLocalStorage {
 
     fun saveCard(artistName: String, card: FullCard)
 
-    fun getCard(artistName: String): FullCard?
+    fun getCards(artistName: String): List<FullCard?>
 }

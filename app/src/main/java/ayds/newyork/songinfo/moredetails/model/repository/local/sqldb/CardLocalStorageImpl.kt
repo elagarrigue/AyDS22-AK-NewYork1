@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import ayds.newyork.songinfo.moredetails.model.repository.local.CardLocalStorage
+import java.util.*
+import ayds.newyork.songinfo.moredetails.model.entities.InfoSource as InfoSource
 
 internal class CardLocalStorageImpl(
     context: Context,
@@ -18,20 +20,26 @@ internal class CardLocalStorageImpl(
         ARTIST_NAME_COLUMN,
         CARD_URL_COLUMN,
         CARD_INFO_COLUMN,
-        CARD_SOURCE_COLUMN
+        CARD_SOURCE_COLUMN,
+        CARD_SOURCE_LOGO_COLUMN
     )
 
-    override fun getCard(artistName: String): FullCard? {
-        val cursor = readableDatabase.query(
-            CARDS_TABLE_NAME,
-            projection,
-            "$ARTIST_NAME_COLUMN = ?",
-            arrayOf(artistName),
-            null,
-            null,
-            CARD_DESC
-        )
-        return cursorToArticleMapper.map(cursor)
+    override fun getCards(artistName: String): List<FullCard?> {
+        val cardList= LinkedList<FullCard?>()
+        for (infoSource in InfoSource.values()) {
+            val cursor = readableDatabase.query(
+                CARDS_TABLE_NAME,
+                projection,
+                "$ARTIST_NAME_COLUMN = ? AND $CARD_SOURCE_COLUMN = ?",
+                arrayOf(artistName,infoSource.toString()),
+                null,
+                null,
+                CARD_DESC
+            )
+            cardList.add(cursorToArticleMapper.map(cursor))
+        }
+        return cardList
+
     }
 
     override fun saveCard(artistName: String, card: FullCard) {
@@ -39,7 +47,8 @@ internal class CardLocalStorageImpl(
             put(ARTIST_NAME_COLUMN, artistName)
             put(CARD_INFO_COLUMN, card.description)
             put(CARD_URL_COLUMN, card.infoURL)
-            put(CARD_SOURCE_COLUMN, card.source)
+            put(CARD_SOURCE_COLUMN, card.source.ordinal)
+            put(CARD_SOURCE_LOGO_COLUMN, card.sourceLogoURL)
         }
         writableDatabase?.insert(CARDS_TABLE_NAME, null, values)
     }

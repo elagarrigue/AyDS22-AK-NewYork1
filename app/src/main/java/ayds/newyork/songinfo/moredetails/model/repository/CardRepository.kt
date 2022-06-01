@@ -1,53 +1,59 @@
 package ayds.newyork.songinfo.moredetails.model.repository
 
 import ayds.ak1.newyorktimes.article.external.NYArticle
-import ayds.newyork.songinfo.moredetails.model.entities.Card
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import ayds.newyork.songinfo.moredetails.model.repository.local.CardLocalStorage
-import ayds.ak1.newyorktimes.article.external.NYInfoService
+// import Broker
+import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
+import java.util.*
 
 
 interface CardRepository {
-    fun getCardByArtistName(artistName: String): Card
+    fun getCardsByArtistName(artistName: String):List<Card>
 }
 
 internal class CardRepositoryImpl(
-    private val nyInfoService: NYInfoService,
+    //private val informacionBroker: InformacionBrokerTODO Broker
     private val cardLocalStorage: CardLocalStorage
 ) : CardRepository {
 
-    override fun getCardByArtistName(artistName: String): Card {
-        var card = cardLocalStorage.getCard(artistName)
+    override fun getCardsByArtistName(artistName: String): List<FullCard> {
+        val card = cardLocalStorage.getCards(artistName)
+        var brokerCardList= LinkedList<FullCard>()
+
         when {
-            card != null -> markArticleAsLocal(card)
+            card.isNotEmpty() -> for(Card in card) {
+                markArticleAsLocal(Card)
+            }
             else -> {
-                try {
-                    val nyArtistInfo = nyInfoService.getArtistInfo(artistName)
-                    nyArtistInfo?.let {
-                        card = createNYInfoCard(artistName, it)
+                // TODO call Broker
+                // brokerCardList = getList()
+
+                if (brokerCardList.isNotEmpty())
+                    for(Card in brokerCardList) {
+                        cardLocalStorage.saveCard(artistName,Card)
                     }
-                    card?.let {
-                        cardLocalStorage.saveCard(artistName, it)
-                    }
-                } catch (e: Exception) {
-                    card = null
-                }
             }
         }
-        return card ?: EmptyCard
+        return brokerCardList
+
     }
 
+    //TODO mover a extra class
     private fun createNYInfoCard(artistName: String, nyArticle: NYArticle): FullCard {
         return FullCard(
             nyArticle.description,
             nyArticle.infoURL,
             artistName,
+            InfoSource.NewYorkTimes,
             nyArticle.logoURL
         )
     }
 
-    private fun markArticleAsLocal(card: FullCard) {
-        card.isLocallyStored = true
+    private fun markArticleAsLocal(card: FullCard?) {
+        if (card != null) {
+            card.isLocallyStored = true
+        }
     }
 }
