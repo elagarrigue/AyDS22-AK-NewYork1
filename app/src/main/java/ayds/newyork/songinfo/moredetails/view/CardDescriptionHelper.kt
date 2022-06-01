@@ -2,6 +2,7 @@ package ayds.newyork.songinfo.moredetails.view
 
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
+import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
 import java.lang.StringBuilder
 
 interface CardDescriptionHelper {
@@ -30,7 +31,7 @@ internal class CardDescriptionHelperImpl : CardDescriptionHelper {
             append(HTML_FONT)
             append(FUENTE)
             when (card.source){
-                "NYArticle" ->append(card.source)
+                InfoSource.NewYorkTimes->append(card.source.toString())
                 else ->append("Not Found")
             }
             append(HTML_END_TAGS)
