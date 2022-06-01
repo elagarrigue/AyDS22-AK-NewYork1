@@ -4,6 +4,10 @@ import android.content.Context
 import ayds.newyork.songinfo.moredetails.model.repository.CardRepository
 import ayds.newyork.songinfo.moredetails.model.repository.CardRepositoryImpl
 import ayds.ak1.newyorktimes.article.external.NYInjector
+import ayds.newyork.songinfo.moredetails.model.repository.external.broker.Broker
+import ayds.newyork.songinfo.moredetails.model.repository.external.broker.BrokerImpl
+import ayds.newyork.songinfo.moredetails.model.repository.external.broker.Proxy
+import ayds.newyork.songinfo.moredetails.model.repository.external.broker.ProxyNewYorkTimes
 import ayds.newyork.songinfo.moredetails.model.repository.local.CardLocalStorage
 import ayds.newyork.songinfo.moredetails.model.repository.local.sqldb.CardLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.model.repository.local.sqldb.CursorToCardMapperImpl
@@ -21,11 +25,11 @@ object MoreDetailsModelInjector {
             moreDetailsView as Context, CursorToCardMapperImpl()
         )
 
-        //val nyInfoService: NYInfoService = NYInjector.nyInfoService
-        // TODO cardBroker: CardBroker=NYInjector.cardBroker
+        val proxyNYTimes: Proxy = ProxyNewYorkTimes(NYInjector.nyInfoService)
+        val cardBroker: Broker = BrokerImpl(listOf(proxyLastFM, proxyWikipedia, proxyNYTimes))
 
         val repository: CardRepository =
-            CardRepositoryImpl(cardLocalStorage)
+            CardRepositoryImpl(cardLocalStorage, cardBroker)
 
         moreDetailsModel = MoreDetailsModelImpl(repository)
     }

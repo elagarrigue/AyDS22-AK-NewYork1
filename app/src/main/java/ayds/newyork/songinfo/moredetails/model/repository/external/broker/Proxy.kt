@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.model.broker
+package ayds.newyork.songinfo.moredetails.model.repository.external.broker
 
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 
