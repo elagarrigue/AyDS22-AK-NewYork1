@@ -8,3 +8,7 @@ include ':LastFm'
 
 include ':LastFM'
 project(':LastFM').projectDir = new File('libs/lastfm')
+include ':wikipedia'
+
+include ':Wikipedia'
+project(':Wikipedia').projectDir = new File('libs/Wikipedia')

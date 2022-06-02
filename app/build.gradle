@@ -46,6 +46,7 @@ dependencies {
 
     implementation project(':new-york-times-data')
     implementation project(":LastFM")
+    implementation project(":Wikipedia")
 
     
     implementation 'androidx.sqlite:sqlite-ktx:2.2.0'
