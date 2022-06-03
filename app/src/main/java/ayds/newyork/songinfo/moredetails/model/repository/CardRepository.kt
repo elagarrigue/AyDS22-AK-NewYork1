@@ -1,12 +1,7 @@
 package ayds.newyork.songinfo.moredetails.model.repository
-
-import ayds.ak1.newyorktimes.article.external.NYArticle
-import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import ayds.newyork.songinfo.moredetails.model.repository.local.CardLocalStorage
-// import Broker
 import ayds.newyork.songinfo.moredetails.model.entities.Card
-import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
-import java.util.*
+import ayds.newyork.songinfo.moredetails.model.repository.external.broker.Broker
 
 
 interface CardRepository {
@@ -14,44 +9,31 @@ interface CardRepository {
 }
 
 internal class CardRepositoryImpl(
-    //private val informacionBroker: InformacionBrokerTODO Broker
-    private val cardLocalStorage: CardLocalStorage
+    private val cardLocalStorage: CardLocalStorage,
+    private val broker: Broker
 ) : CardRepository {
 
-    override fun getCardsByArtistName(artistName: String): List<FullCard> {
+    override fun getCardsByArtistName(artistName: String): List<Card> {
         val card = cardLocalStorage.getCards(artistName)
-        var brokerCardList= LinkedList<FullCard>()
 
         when {
             card.isNotEmpty() -> for(Card in card) {
                 markArticleAsLocal(Card)
             }
             else -> {
-                // TODO call Broker
-                // brokerCardList = getList()
-
+                val brokerCardList = broker.getCards(artistName)
                 if (brokerCardList.isNotEmpty())
                     for(Card in brokerCardList) {
                         cardLocalStorage.saveCard(artistName,Card)
                     }
+                return brokerCardList
             }
         }
-        return brokerCardList
+        return card
 
     }
 
-    //TODO mover a extra class
-    private fun createNYInfoCard(artistName: String, nyArticle: NYArticle): FullCard {
-        return FullCard(
-            nyArticle.description,
-            nyArticle.infoURL,
-            artistName,
-            InfoSource.NewYorkTimes,
-            nyArticle.logoURL
-        )
-    }
-
-    private fun markArticleAsLocal(card: FullCard?) {
+    private fun markArticleAsLocal(card: Card?) {
         if (card != null) {
             card.isLocallyStored = true
         }
