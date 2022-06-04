@@ -16,5 +16,5 @@ const val createCardsTableQuery: String =
             "$ARTIST_NAME_COLUMN string, " +
             "$CARD_INFO_COLUMN string, " +
             "$CARD_URL_COLUMN string, " +
-            "$CARD_SOURCE_COLUMN string, " +
+            "$CARD_SOURCE_COLUMN integer, " +
             "$CARD_SOURCE_LOGO_COLUMN string)"

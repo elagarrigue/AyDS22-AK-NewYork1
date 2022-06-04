@@ -25,13 +25,13 @@ internal class CardLocalStorageImpl(
     )
 
     override fun getCards(artistName: String): List<Card> {
-        val cardList= LinkedList<Card>()
+        val cardList = LinkedList<Card>()
         for (infoSource in InfoSource.values()) {
             val cursor = readableDatabase.query(
                 CARDS_TABLE_NAME,
                 projection,
-                "$ARTIST_NAME_COLUMN = ? AND $CARD_SOURCE_COLUMN = ?",
-                arrayOf(artistName,infoSource.toString()),
+                "$ARTIST_NAME_COLUMN = ? AND $CARD_SOURCE_COLUMN = ${infoSource.ordinal}",
+                arrayOf(artistName),
                 null,
                 null,
                 CARD_DESC
