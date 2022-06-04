@@ -1,14 +1,9 @@
-include ':app'
-include 'observer'
 include ':new-york-times-data'
 project(':new-york-times-data').projectDir = new File('libs/NewYorkTimesData')
-rootProject.name = "AK New York"
-include ':new-york-times-data'
-include ':LastFm'
-
 include ':LastFM'
 project(':LastFM').projectDir = new File('libs/lastfm')
-include ':wikipedia'
-
 include ':Wikipedia'
 project(':Wikipedia').projectDir = new File('libs/Wikipedia')
+include ':app'
+include 'observer'
+rootProject.name = "AK New York"
