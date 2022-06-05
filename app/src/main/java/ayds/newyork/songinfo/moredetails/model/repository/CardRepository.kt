@@ -18,7 +18,7 @@ internal class CardRepositoryImpl(
 
         when {
             repositoryCards.isNotEmpty() -> for(Card in repositoryCards) {
-                markArticleAsLocal(Card)
+                markCardAsLocal(Card)
             }
             else -> {
                 val brokerCardList = broker.getCards(artistName)
@@ -33,7 +33,7 @@ internal class CardRepositoryImpl(
 
     }
 
-    private fun markArticleAsLocal(card: Card?) {
+    private fun markCardAsLocal(card: Card?) {
         if (card != null) {
             card.isLocallyStored = true
         }
