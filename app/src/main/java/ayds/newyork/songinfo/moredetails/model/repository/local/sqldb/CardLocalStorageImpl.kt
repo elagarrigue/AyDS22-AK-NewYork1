@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.repository.local.CardLocalStorage
 import java.util.*
 import ayds.newyork.songinfo.moredetails.model.entities.InfoSource as InfoSource
@@ -30,13 +31,14 @@ internal class CardLocalStorageImpl(
             val cursor = readableDatabase.query(
                 CARDS_TABLE_NAME,
                 projection,
-                "$ARTIST_NAME_COLUMN = ? AND $CARD_SOURCE_COLUMN = ${infoSource.ordinal}",
-                arrayOf(artistName),
+                "$ARTIST_NAME_COLUMN = ? AND $CARD_SOURCE_COLUMN = ?",
+                arrayOf(artistName,infoSource.toString()),
                 null,
                 null,
                 CARD_DESC
             )
-            cardList.add(cursorToArticleMapper.map(cursor))
+            if (cursorToArticleMapper.map(cursor)!=EmptyCard)
+                cardList.add(cursorToArticleMapper.map(cursor))
         }
         return cardList
     }
