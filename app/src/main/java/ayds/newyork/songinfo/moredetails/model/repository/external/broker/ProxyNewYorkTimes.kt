@@ -10,22 +10,25 @@ import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
 class ProxyNewYorkTimes(
     private val NYTimesService: NYInfoService
 ) : Proxy {
+
     override fun getCard(artistName: String): Card {
         val infoArtist = NYTimesService.getArtistInfo(artistName)
         return getCardFromService(infoArtist)
     }
 
     private fun getCardFromService(article: NYArticle?): Card =
-        article?.let {
-            FullCard(
-                it.description,
-                it.infoURL,
-                it.artistName,
-                InfoSource.NewYorkTimes,
-                it.logoURL
-            )
-        }.run {
-            EmptyCard
+        when {
+            article != null -> {
+                FullCard(
+                    article.description,
+                    article.infoURL,
+                    article.artistName,
+                    InfoSource.NewYorkTimes,
+                    article.logoURL
+                )
+            }
+            else -> {
+                EmptyCard
+            }
         }
-
 }

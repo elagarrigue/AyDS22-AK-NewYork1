@@ -16,16 +16,20 @@ class ProxyLastFM(
         val artistInfo = lastFMService.getArtist(artistName)
         return getCardFromService(artistInfo)
     }
+
     private fun getCardFromService(article: LastFMArtist?): Card =
-        article?.let {
-            FullCard(
-                it.description,
-                it.infoURL,
-                it.artistName,
-                InfoSource.LastFM,
-                LASTFM_LOGO
-            )
-        }.run {
-            EmptyCard
+        when {
+            article != null -> {
+                FullCard(
+                    article.description,
+                    article.infoURL,
+                    article.artistName,
+                    InfoSource.LastFM,
+                    LASTFM_LOGO
+                )
+            }
+            else -> {
+                EmptyCard
+            }
         }
 }
