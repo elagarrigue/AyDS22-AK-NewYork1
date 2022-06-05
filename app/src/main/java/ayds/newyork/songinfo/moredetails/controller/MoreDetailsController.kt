@@ -29,7 +29,7 @@ internal class MoreDetailsControllerImpl(
         }
 
     private fun openMoreInfoUrl() {
-        moreDetailsView.openExternalLink(moreDetailsView.uiState.artistUrl)
+        moreDetailsView.openExternalLink(moreDetailsView.uiState.cardList[moreDetailsView.uiState.positionSpinner].infoURL)
     }
 
     private fun showInfoArticle() {
