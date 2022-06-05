@@ -31,8 +31,8 @@ internal class CardLocalStorageImpl(
             val cursor = readableDatabase.query(
                 CARDS_TABLE_NAME,
                 projection,
-                "$ARTIST_NAME_COLUMN = ? AND $CARD_SOURCE_COLUMN = ?",
-                arrayOf(artistName,infoSource.toString()),
+                "$ARTIST_NAME_COLUMN = ? AND $CARD_SOURCE_COLUMN = ${infoSource.ordinal}",
+                arrayOf(artistName,),
                 null,
                 null,
                 CARD_DESC
