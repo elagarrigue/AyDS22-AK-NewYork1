@@ -14,11 +14,11 @@ internal class CardRepositoryImpl(
 ) : CardRepository {
 
     override fun getCardsByArtistName(artistName: String): List<Card> {
-        val card = cardLocalStorage.getCards(artistName)
+        val repositoryCards = cardLocalStorage.getCards(artistName)
 
         when {
-            card.isNotEmpty() -> for(Card in card) {
-                markArticleAsLocal(Card)
+            repositoryCards.isNotEmpty() -> for(Card in repositoryCards) {
+                markCardAsLocal(Card)
             }
             else -> {
                 val brokerCardList = broker.getCards(artistName)
@@ -29,11 +29,11 @@ internal class CardRepositoryImpl(
                 return brokerCardList
             }
         }
-        return card
+        return repositoryCards
 
     }
 
-    private fun markArticleAsLocal(card: Card?) {
+    private fun markCardAsLocal(card: Card?) {
         if (card != null) {
             card.isLocallyStored = true
         }
