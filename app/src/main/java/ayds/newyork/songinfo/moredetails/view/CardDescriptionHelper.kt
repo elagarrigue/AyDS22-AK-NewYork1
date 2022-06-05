@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.moredetails.view
 
 import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
 import java.lang.StringBuilder
@@ -15,7 +16,7 @@ private const val HTML_DIV_WIDTH = "<html><div width=400>"
 private const val HTML_FONT = "<font face=\"arial\">"
 private const val HTML_END_TAGS = "</font></div></html>"
 private const val CARD_NOT_FOUND = "article not found"
-private const val FUENTE ="Source: "
+private const val FUENTE = "Source: "
 
 
 internal class CardDescriptionHelperImpl : CardDescriptionHelper {
@@ -30,9 +31,9 @@ internal class CardDescriptionHelperImpl : CardDescriptionHelper {
             append(HTML_DIV_WIDTH)
             append(HTML_FONT)
             append(FUENTE)
-            when (card.source){
-                InfoSource.NewYorkTimes->append(card.source.toString())
-                else ->append("Not Found")
+            when (card) {
+                is EmptyCard -> append("Not Found")
+                else -> append(card.source.toString())
             }
             append(HTML_END_TAGS)
         }.toString()
