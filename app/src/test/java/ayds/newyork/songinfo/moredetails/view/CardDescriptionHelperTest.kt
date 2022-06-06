@@ -2,6 +2,7 @@ package ayds.newyork.songinfo.moredetails.view
 
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
+import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
@@ -13,11 +14,12 @@ private const val SONG_FOUND_LOCAL = "[*]"
 private const val ARTICLE_DESCRIPTION = "reactions of kin of freed Amers"
 private const val ARTICLE_URL = "url"
 private const val ARTIST_NAME_ARTICLE = "Patricio Rey y sus Redonditos de Ricota"
-private const val SOURCE = "Source"
 
 class CardDescriptionHelperTest {
 
     private val articleDescriptionHelper by lazy { CardDescriptionHelperImpl() }
+    private val SOURCE = InfoSource.NewYorkTimes
+
     private val storedArticle = FullCard(
         ARTICLE_DESCRIPTION,
         ARTICLE_URL,
