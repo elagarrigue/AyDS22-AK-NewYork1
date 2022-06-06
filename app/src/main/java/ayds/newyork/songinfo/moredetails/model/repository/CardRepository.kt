@@ -16,18 +16,18 @@ internal class CardRepositoryImpl(
 
     override fun getCardsByArtistName(artistName: String): List<Card> {
         val repositoryCards = cardLocalStorage.getCards(artistName)
-        var justEmptyCards=false
+        var existFullCards=false
 
         for (Card in repositoryCards){
             if (Card!=EmptyCard){
                 markCardAsLocal(Card)
-                justEmptyCards=true
+                existFullCards=true
             }
 
         }
 
         when {
-            justEmptyCards -> return repositoryCards
+            existFullCards -> return repositoryCards
 
             else -> {
                 val brokerCardList = broker.getCards(artistName)
