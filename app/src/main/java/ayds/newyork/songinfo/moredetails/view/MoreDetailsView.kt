@@ -8,8 +8,8 @@ import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
-import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
+import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsUiState.Companion.LOGO_NOT_FOUND_URL
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
@@ -64,12 +64,10 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView,
 
     override fun onItemSelected(arg0: AdapterView<*>?, arg1: View?, position: Int, id: Long) {
         uiState = uiState.copy(positionSpinner = sourceSpinner.selectedItemPosition)
-        updateArtistInfo(uiState.getCurrentCard())
+        updateArtistInfo()
     }
 
-    override fun onNothingSelected(arg0: AdapterView<*>?) {
-        // TODO Auto-generated method stub
-    }
+    override fun onNothingSelected(arg0: AdapterView<*>?) {}
 
     private fun initInjector() {
         MoreDetailsViewInjector.init(this)
@@ -89,13 +87,13 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView,
     }
 
     private fun initSpinner() {
-        val sources = arrayOf("LastFM", "Wikipedia", "NewYorkTimes")
-        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, sources)
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sourceSpinner.adapter = aa
+        val sourceList = InfoSource.values().toMutableList()
+        sourceList.removeLast()
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sourceList)
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sourceSpinner.adapter = arrayAdapter
         sourceSpinner.setSelection(2, false)
         sourceSpinner.onItemSelectedListener = this
-
     }
 
     private fun initListeners() {
@@ -106,64 +104,56 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView,
         moreDetailsModel.cardObservable
             .subscribe { value ->
                 uiState = uiState.copy(cardList = value)
-                updateArtistInfo(uiState.getCurrentCard())
+                updateArtistInfo()
             }
     }
 
-    private fun updateArtistInfo(artistCard: Card) {
-        updateArtistDescription(artistCard)
-        updateSourceDescription(artistCard)
-        updateUrlButton(artistCard)
+    private fun updateArtistInfo() {
+        updateArtistDescription()
+        updateSourceDescription()
+        updateUrlButton()
         updateSongImage()
     }
 
-    private fun updateArtistDescription(artistCard: Card) {
+    private fun updateArtistDescription() {
         runOnUiThread {
-            with(articleDescriptionHelper.textToHtml(artistCard)) {
+            with(articleDescriptionHelper.textToHtml(uiState.getCurrentCard())) {
                 cardPane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
             }
         }
     }
 
-    private fun updateSourceDescription(artistCard: Card) {
+    private fun updateSourceDescription() {
         runOnUiThread {
-            with(articleDescriptionHelper.sourceToHtml(artistCard)) {
+            with(articleDescriptionHelper.sourceToHtml(uiState.getCurrentCard())) {
                 sourcePane.text = HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_LEGACY)
             }
         }
     }
 
-    private fun updateUrlButton(artistCard: Card) {
+    private fun updateUrlButton() {
         runOnUiThread {
-            when (artistCard) {
-                is EmptyCard -> disableButton()
-                else -> enableButton()
+            when (uiState.getCurrentCard()) {
+                is EmptyCard -> enableAction(false)
+                else -> enableAction(true)
             }
         }
     }
 
-    private fun disableButton() {
-        openUrlButton.isEnabled = false
-        openUrlButton.isClickable = false
-    }
-
-    private fun enableButton() {
-        openUrlButton.isEnabled = true
-        openUrlButton.isClickable = true
+    private fun enableAction(enable: Boolean) {
+        openUrlButton.isEnabled = enable
+        openUrlButton.isClickable = enable
     }
 
     private fun updateSongImage() {
         runOnUiThread {
-            if (uiState.getCurrentCard().sourceLogoURL != "")
-                imageLoader.loadImageIntoView(
+            when (uiState.getCurrentCard()) {
+                is EmptyCard -> imageLoader.loadImageIntoView(LOGO_NOT_FOUND_URL, imageView)
+                else -> imageLoader.loadImageIntoView(
                     uiState.getCurrentCard().sourceLogoURL,
                     imageView
                 )
-            else
-                imageLoader.loadImageIntoView(
-                    LOGO_NOT_FOUND_URL,
-                    imageView
-                )
+            }
         }
     }
 
