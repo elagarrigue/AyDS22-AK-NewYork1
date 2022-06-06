@@ -10,6 +10,7 @@ import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
+import ayds.newyork.songinfo.moredetails.view.MoreDetailsUiState.Companion.LOGO_NOT_FOUND_URL
 import ayds.newyork.songinfo.utils.UtilsInjector
 import ayds.newyork.songinfo.utils.UtilsInjector.navigationUtils
 import ayds.newyork.songinfo.utils.view.ImageLoader
@@ -63,7 +64,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView,
 
     override fun onItemSelected(arg0: AdapterView<*>?, arg1: View?, position: Int, id: Long) {
         uiState = uiState.copy(positionSpinner = sourceSpinner.selectedItemPosition)
-        updateArtistInfo(uiState.cardList[uiState.positionSpinner])
+        updateArtistInfo(uiState.getCurrentCard())
     }
 
     override fun onNothingSelected(arg0: AdapterView<*>?) {
@@ -105,7 +106,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView,
         moreDetailsModel.cardObservable
             .subscribe { value ->
                 uiState = uiState.copy(cardList = value)
-                updateArtistInfo(uiState.cardList[uiState.positionSpinner])
+                updateArtistInfo(uiState.getCurrentCard())
             }
     }
 
@@ -153,14 +154,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView,
 
     private fun updateSongImage() {
         runOnUiThread {
-            if (uiState.cardList[uiState.positionSpinner].sourceLogoURL != "")
+            if (uiState.getCurrentCard().sourceLogoURL != "")
                 imageLoader.loadImageIntoView(
-                    uiState.cardList[uiState.positionSpinner].sourceLogoURL,
+                    uiState.getCurrentCard().sourceLogoURL,
                     imageView
                 )
             else
                 imageLoader.loadImageIntoView(
-                    "https://bitsofco.de/content/images/2018/12/broken-1.png",
+                    LOGO_NOT_FOUND_URL,
                     imageView
                 )
         }
