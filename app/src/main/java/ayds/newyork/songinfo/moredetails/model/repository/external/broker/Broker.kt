@@ -14,7 +14,7 @@ internal class BrokerImpl(
         mutableListOf<Card>().apply {
             for (proxy in proxies) {
                 val card = proxy.getCard(artistName)
-                if (card is FullCard)
+                //if (card is FullCard)
                     add(card)
             }
         }

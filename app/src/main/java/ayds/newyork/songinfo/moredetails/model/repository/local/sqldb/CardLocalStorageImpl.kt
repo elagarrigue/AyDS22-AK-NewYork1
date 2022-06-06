@@ -37,7 +37,9 @@ internal class CardLocalStorageImpl(
                 null,
                 CARD_DESC
             )
-            if (cursorToArticleMapper.map(cursor)!=EmptyCard)
+            //if (cursorToArticleMapper.map(cursor)!=EmptyCard)
+            //    cardList.add(cursorToArticleMapper.map(cursor))
+            if (infoSource!=InfoSource.NoSource)
                 cardList.add(cursorToArticleMapper.map(cursor))
         }
         return cardList
