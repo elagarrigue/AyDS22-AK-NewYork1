@@ -88,7 +88,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView,
 
     private fun initSpinner() {
         val sourceList = InfoSource.values().toMutableList()
-        sourceList.removeLast()
+        sourceList.remove(InfoSource.NoSource)
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sourceList)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sourceSpinner.adapter = arrayAdapter
