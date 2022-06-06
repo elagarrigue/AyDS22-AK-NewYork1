@@ -87,13 +87,17 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView,
     }
 
     private fun initSpinner() {
-        val sourceList = InfoSource.values().toMutableList()
-        sourceList.remove(InfoSource.NoSource)
-        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sourceList)
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, getSources())
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sourceSpinner.adapter = arrayAdapter
         sourceSpinner.setSelection(2, false)
         sourceSpinner.onItemSelectedListener = this
+    }
+
+    private fun getSources(): MutableList<InfoSource> {
+        val sourceList = InfoSource.values().toMutableList()
+        sourceList.remove(InfoSource.NoSource)
+        return sourceList
     }
 
     private fun initListeners() {
