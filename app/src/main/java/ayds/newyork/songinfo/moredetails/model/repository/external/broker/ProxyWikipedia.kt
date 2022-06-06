@@ -9,7 +9,6 @@ import ayds.winchester1.wikipedia.WikipediaCardService
 
 private const val WIKIPEDIA_LOGO_URL =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
-private const val ARTIST_NAME_WIKIPEDIA = "Nombre del artista"
 
 class ProxyWikipedia(
     private val wikiService: WikipediaCardService
@@ -17,16 +16,16 @@ class ProxyWikipedia(
 
     override fun getCard(artistName: String): Card {
         val artistInfo = wikiService.getCard(artistName)
-        return getCardFromService(artistInfo)
+        return getCardFromService(artistInfo, artistName)
     }
 
-    private fun getCardFromService(article: WikipediaArtistInfo?): Card =
+    private fun getCardFromService(article: WikipediaArtistInfo?, artistName: String): Card =
         when {
             article != null -> {
                 FullCard(
                     article.description,
                     article.infoURL,
-                    ARTIST_NAME_WIKIPEDIA,
+                    artistName,
                     InfoSource.Wikipedia,
                     WIKIPEDIA_LOGO_URL
                 )
