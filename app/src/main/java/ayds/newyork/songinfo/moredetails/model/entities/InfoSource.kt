@@ -1,8 +1,8 @@
 package ayds.newyork.songinfo.moredetails.model.entities
 
 enum class InfoSource (val service: String) {
-    NewYorkTimes("New York Times"),
-    Wikipedia("Wikipedia"),
     LastFM("Last FM"),
+    Wikipedia("Wikipedia"),
+    NewYorkTimes("New York Times"),
     NoSource("Source Not Found")
 }
