@@ -2,7 +2,6 @@ package ayds.newyork.songinfo.moredetails.model.repository
 
 import ayds.newyork.songinfo.moredetails.model.repository.local.CardLocalStorage
 import ayds.newyork.songinfo.moredetails.model.entities.Card
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.repository.external.broker.Broker
 
 interface CardRepository {
@@ -16,31 +15,21 @@ internal class CardRepositoryImpl(
 
     override fun getCardsByArtistName(artistName: String): List<Card> {
         val repositoryCards = cardLocalStorage.getCards(artistName)
-        val existFullCards = checkListForFullCards(repositoryCards)
 
-        return when {
-            existFullCards -> repositoryCards
+        when {
+            repositoryCards.isNotEmpty() -> for(Card in repositoryCards) {
+                markCardAsLocal(Card)
+            }
             else -> {
                 val brokerCardList = broker.getCards(artistName)
-                for (Card in brokerCardList) {
-                    if (Card != EmptyCard) {
-                        cardLocalStorage.saveCard(artistName, Card)
+                if (brokerCardList.isNotEmpty())
+                    for(Card in brokerCardList) {
+                        cardLocalStorage.saveCard(artistName,Card)
                     }
+                    return brokerCardList
                 }
-                brokerCardList
             }
-        }
-    }
-
-    private fun checkListForFullCards(repositoryCards: List<Card>): Boolean {
-        var existFullCards = false
-        for (Card in repositoryCards) {
-            if (Card != EmptyCard) {
-                markCardAsLocal(Card)
-                existFullCards = true
-            }
-        }
-        return existFullCards
+            return repositoryCards
     }
 
     private fun markCardAsLocal(card: Card) {

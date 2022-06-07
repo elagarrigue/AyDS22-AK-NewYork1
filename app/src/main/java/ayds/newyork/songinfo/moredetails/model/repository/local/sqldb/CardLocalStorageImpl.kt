@@ -5,6 +5,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
+import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import ayds.newyork.songinfo.moredetails.model.repository.local.CardLocalStorage
 import java.util.*
 import ayds.newyork.songinfo.moredetails.model.entities.InfoSource as InfoSource
@@ -36,8 +38,9 @@ internal class CardLocalStorageImpl(
                 null,
                 CARD_DESC
             )
-            if (infoSource != InfoSource.NoSource)
-                cardList.add(cursorToArticleMapper.map(cursor))
+            val card=cursorToArticleMapper.map(cursor)
+            if (card is FullCard)
+                cardList.add(card)
         }
         return cardList
     }

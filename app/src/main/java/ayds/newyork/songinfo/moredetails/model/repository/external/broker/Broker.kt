@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.moredetails.model.repository.external.broker
 
 import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 
 interface Broker {
     fun getCards(artistName: String): List<Card>
@@ -13,7 +14,8 @@ internal class BrokerImpl(
         mutableListOf<Card>().apply {
             for (proxy in proxies) {
                 val card = proxy.getCard(artistName)
-                add(card)
+                if (card is FullCard)
+                    add(card)
             }
         }
 }
