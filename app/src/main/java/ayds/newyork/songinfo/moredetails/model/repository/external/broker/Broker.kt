@@ -12,8 +12,8 @@ internal class BrokerImpl(
 ) : Broker {
     override fun getCards(artistName: String): List<Card> =
         mutableListOf<Card>().apply {
-            for (proxy in proxies) {
-                val card = proxy.getCard(artistName)
+            proxies.forEach {
+                val card=it.getCard(artistName)
                 if (card is FullCard)
                     add(card)
             }
