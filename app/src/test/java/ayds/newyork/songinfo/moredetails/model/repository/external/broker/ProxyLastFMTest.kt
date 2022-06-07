@@ -11,26 +11,26 @@ import org.junit.Assert
 import org.junit.Test
 
 class ProxyLastFMTest {
-    private val lastFMService: LastFMService = mockk(relaxUnitFun=true)
+    private val lastFMService: LastFMService = mockk(relaxUnitFun = true)
     private val proxyLastFM: Proxy by lazy {
         ProxyLastFM(lastFMService)
     }
 
     @Test
     fun `on found artist name should return FullCard `() {
-         val lastFMArtist = LastFMArtist("artistName","description","infoURL")
+        val lastFMArtist = LastFMArtist("artistName", "description", "infoURL")
 
-        every { lastFMService.getArtist("artistName")} returns lastFMArtist
-        val card=proxyLastFM.getCard("artistName")
+        every { lastFMService.getArtist("artistName") } returns lastFMArtist
+        val card = proxyLastFM.getCard("artistName")
 
         Assert.assertTrue(card is FullCard)
     }
 
     @Test
-    fun `not found artist name should return EmptyCard `(){
+    fun `not found artist name should return EmptyCard `() {
         val lastFMArtist = null
-        every { lastFMService.getArtist("artistName")} returns lastFMArtist
-        val card=proxyLastFM.getCard("artistName")
+        every { lastFMService.getArtist("artistName") } returns lastFMArtist
+        val card = proxyLastFM.getCard("artistName")
 
         Assert.assertTrue(card is EmptyCard)
 
