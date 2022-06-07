@@ -26,7 +26,7 @@ object MoreDetailsModelInjector {
         )
 
         val proxyNYTimes: Proxy = ProxyNewYorkTimes(NYInjector.nyInfoService)
-        val proxyWikipedia: Proxy = ProxyWikipedia(WikipediaInjector.wikipediaCardService)
+        val proxyWikipedia: Proxy = ProxyWikipedia(WikipediaInjector.wikipediaService)
         val proxyLastFM: Proxy = ProxyLastFM(LastFMInjector.lastFMService)
         val cardBroker: Broker = BrokerImpl(listOf(proxyLastFM, proxyWikipedia, proxyNYTimes))
 

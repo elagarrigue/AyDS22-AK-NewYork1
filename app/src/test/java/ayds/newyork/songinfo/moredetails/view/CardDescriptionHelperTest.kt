@@ -18,13 +18,13 @@ private const val ARTIST_NAME_ARTICLE = "Patricio Rey y sus Redonditos de Ricota
 class CardDescriptionHelperTest {
 
     private val articleDescriptionHelper by lazy { CardDescriptionHelperImpl() }
-    private val SOURCE = InfoSource.NewYorkTimes
+    private val source = InfoSource.NewYorkTimes
 
     private val storedArticle = FullCard(
         ARTICLE_DESCRIPTION,
         ARTICLE_URL,
         ARTIST_NAME_ARTICLE,
-        SOURCE,
+        source,
         "",
         true
     )
@@ -32,7 +32,7 @@ class CardDescriptionHelperTest {
         ARTICLE_DESCRIPTION,
         ARTICLE_URL,
         ARTIST_NAME_ARTICLE,
-        SOURCE,
+        source,
         "",
         false
     )

@@ -1,8 +1,6 @@
 package ayds.newyork.songinfo.moredetails.model.repository.local.sqldb
 
 import android.database.Cursor
-import ayds.newyork.songinfo.home.model.entities.DatePrecision
-import ayds.newyork.songinfo.home.model.repository.local.spotify.sqldb.RELEASE_DATE_PRECISION_COLUMN
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard

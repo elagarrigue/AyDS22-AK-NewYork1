@@ -1,6 +1,5 @@
 package ayds.newyork.songinfo.moredetails.controller
 
-
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
@@ -38,9 +37,16 @@ class MoreDetailsControllerTest {
     @Before
     fun setup() {
         moreDetailsController.setMoreDetailsView(moreDetailsView)
-        for(i in 0..2){
-            val card: Card = FullCard(ARTIST_DESCRIPTION,INFO_URL,ARTIST_NAME,InfoSource.NewYorkTimes,SOURCE_LOGO,false)
-            cards.add(i,card)
+        for (i in 0..2) {
+            val card: Card = FullCard(
+                ARTIST_DESCRIPTION,
+                INFO_URL,
+                ARTIST_NAME,
+                InfoSource.NewYorkTimes,
+                SOURCE_LOGO,
+                false
+            )
+            cards.add(i, card)
         }
     }
 

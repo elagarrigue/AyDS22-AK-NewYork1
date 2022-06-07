@@ -5,17 +5,17 @@ import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
 import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
 import ayds.winchester1.wikipedia.WikipediaArtistInfo
-import ayds.winchester1.wikipedia.WikipediaCardService
+import ayds.winchester1.wikipedia.WikipediaService
 
 private const val WIKIPEDIA_LOGO_URL =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
 
 class ProxyWikipedia(
-    private val wikiService: WikipediaCardService
+    private val wikiService: WikipediaService
 ) : Proxy {
 
     override fun getCard(artistName: String): Card {
-        val artistInfo = wikiService.getCard(artistName)
+        val artistInfo = wikiService.getArtistInfo(artistName)
         return getCardFromService(artistInfo, artistName)
     }
 

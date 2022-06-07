@@ -8,6 +8,7 @@ data class MoreDetailsUiState(
     val positionSpinner: Int = 2,
 ) {
     fun getCurrentCard(): Card = cardList[positionSpinner]
+
     companion object {
         const val LOGO_NOT_FOUND_URL =
             "https://bitsofco.de/content/images/2018/12/broken-1.png"

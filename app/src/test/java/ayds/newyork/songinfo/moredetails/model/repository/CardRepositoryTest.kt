@@ -12,7 +12,7 @@ import org.junit.Assert.*
 import org.junit.Test
 
 private const val ARTIST_NAME = "artistName"
-private val EMPTY_CARDS=listOf(EmptyCard,EmptyCard,EmptyCard)
+private val EMPTY_CARDS = listOf(EmptyCard, EmptyCard, EmptyCard)
 
 class CardRepositoryTest {
 
@@ -21,7 +21,7 @@ class CardRepositoryTest {
 
 
     private val cardRepository: CardRepository by lazy {
-        CardRepositoryImpl( cardLocalStorage,broker)
+        CardRepositoryImpl(cardLocalStorage, broker)
     }
 
     @Test
@@ -37,7 +37,15 @@ class CardRepositoryTest {
 
     @Test
     fun `given existing article should return article and mark it as local`() {
-        val cardList = listOf(FullCard("articleInformation", "articleURL", ARTIST_NAME,InfoSource.NoSource,"sourceLogo"))
+        val cardList = listOf(
+            FullCard(
+                "articleInformation",
+                "articleURL",
+                ARTIST_NAME,
+                InfoSource.NoSource,
+                "sourceLogo"
+            )
+        )
         every { cardLocalStorage.getCards(ARTIST_NAME) } returns cardList
 
         val result = cardRepository.getCardsByArtistName(ARTIST_NAME)
@@ -50,8 +58,20 @@ class CardRepositoryTest {
 
     @Test
     fun `given non existing article should get the article and store it`() {
-        val articleCards = listOf(FullCard("articleInformation", "articleURL",ARTIST_NAME,InfoSource.NewYorkTimes,"sourceLogo"))
-        every { cardLocalStorage.getCards(ARTIST_NAME) } returns listOf(EmptyCard,EmptyCard,EmptyCard)
+        val articleCards = listOf(
+            FullCard(
+                "articleInformation",
+                "articleURL",
+                ARTIST_NAME,
+                InfoSource.NewYorkTimes,
+                "sourceLogo"
+            )
+        )
+        every { cardLocalStorage.getCards(ARTIST_NAME) } returns listOf(
+            EmptyCard,
+            EmptyCard,
+            EmptyCard
+        )
         every { broker.getCards(ARTIST_NAME) } returns articleCards
 
         val result = cardRepository.getCardsByArtistName(ARTIST_NAME)

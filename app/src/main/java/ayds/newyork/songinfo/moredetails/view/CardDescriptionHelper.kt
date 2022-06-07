@@ -3,7 +3,6 @@ package ayds.newyork.songinfo.moredetails.view
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.entities.FullCard
-import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
 import java.lang.StringBuilder
 
 interface CardDescriptionHelper {
