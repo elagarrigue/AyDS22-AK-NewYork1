@@ -37,17 +37,15 @@ class MoreDetailsControllerTest {
     @Before
     fun setup() {
         moreDetailsController.setMoreDetailsView(moreDetailsView)
-        for (i in 0..2) {
-            val card: Card = FullCard(
-                ARTIST_DESCRIPTION,
-                INFO_URL,
-                ARTIST_NAME,
-                InfoSource.NewYorkTimes,
-                SOURCE_LOGO,
-                false
-            )
-            cards.add(i, card)
-        }
+        val card: Card = FullCard(
+            ARTIST_DESCRIPTION,
+            INFO_URL,
+            ARTIST_NAME,
+            InfoSource.NewYorkTimes,
+            SOURCE_LOGO,
+            false
+        )
+        cards.addAll(listOf(card, card, card))
     }
 
     @Test
