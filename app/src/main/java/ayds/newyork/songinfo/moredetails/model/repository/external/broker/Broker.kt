@@ -13,9 +13,8 @@ internal class BrokerImpl(
     override fun getCards(artistName: String): List<Card> =
         mutableListOf<Card>().apply {
             proxies.forEach {
-                val card=it.getCard(artistName)
-                if (card is FullCard)
-                    add(card)
+                val card = it.getCard(artistName)
+                add(card)
             }
         }
 }
