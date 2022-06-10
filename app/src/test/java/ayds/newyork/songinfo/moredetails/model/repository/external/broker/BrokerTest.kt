@@ -1,16 +1,16 @@
 package ayds.newyork.songinfo.moredetails.model.repository.external.broker
 
-import ayds.ak1.newyorktimes.article.external.NYInjector
-import ayds.lisboa2.lastFM.LastFMInjector
-import ayds.winchester1.wikipedia.WikipediaInjector
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.Test
+import kotlin.text.Typography.times
 
 class BrokerTest {
 
-    private val proxyNYTimes: Proxy = ProxyNewYorkTimes(NYInjector.nyInfoService)
-    private val proxyWikipedia: Proxy = ProxyWikipedia(WikipediaInjector.wikipediaService)
-    private val proxyLastFM: Proxy = ProxyLastFM(LastFMInjector.lastFMService)
+    private val proxyNYTimes: ProxyNewYorkTimes = mockk(relaxed = true)
+    private val proxyWikipedia: ProxyWikipedia = mockk(relaxed = true)
+    private val proxyLastFM: ProxyLastFM = mockk(relaxed = true)
 
     private val broker: Broker by lazy {
         BrokerImpl(
@@ -25,8 +25,10 @@ class BrokerTest {
 
     @Test
     fun `given an artist name it should return a 3 elements list`() {
-        val cardsList = broker.getCards(artistName)
-        Assert.assertTrue(cardsList.size == 3)
+        broker.getCards(artistName)
+        verify{proxyNYTimes.getCard(artistName)}
+        verify{proxyWikipedia.getCard(artistName)}
+        verify{proxyLastFM.getCard(artistName)}
     }
 
 }
