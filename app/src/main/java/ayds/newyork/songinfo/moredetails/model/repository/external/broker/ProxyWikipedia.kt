@@ -7,7 +7,7 @@ import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
 import ayds.winchester1.wikipedia.WikipediaArtistInfo
 import ayds.winchester1.wikipedia.WikipediaService
 
-private const val WIKIPEDIA_LOGO_URL =
+private const val LOGO_URL =
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
 
 class ProxyWikipedia(
@@ -27,7 +27,7 @@ class ProxyWikipedia(
                     article.infoURL,
                     artistName,
                     InfoSource.Wikipedia,
-                    WIKIPEDIA_LOGO_URL
+                    LOGO_URL
                 )
             }
             else -> {
