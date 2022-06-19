@@ -1,7 +1,9 @@
 package ayds.newyork.songinfo.moredetails.controller
 
-
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
+import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.FullCard
+import ayds.newyork.songinfo.moredetails.model.entities.InfoSource
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsUiEvent
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsUiState
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsView
@@ -11,6 +13,11 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
+
+private const val ARTIST_DESCRIPTION = "desc"
+private const val INFO_URL = "url"
+private const val ARTIST_NAME = "name"
+private const val SOURCE_LOGO = "logo"
 
 class MoreDetailsControllerTest {
 
@@ -25,27 +32,38 @@ class MoreDetailsControllerTest {
         MoreDetailsControllerImpl(moreDetailsModel)
     }
 
+    private var cards = mutableListOf<Card>()
+
     @Before
     fun setup() {
         moreDetailsController.setMoreDetailsView(moreDetailsView)
+        val card: Card = FullCard(
+            ARTIST_DESCRIPTION,
+            INFO_URL,
+            ARTIST_NAME,
+            InfoSource.NewYorkTimes,
+            SOURCE_LOGO,
+            false
+        )
+        cards.addAll(listOf(card, card, card))
     }
 
     @Test
     fun `on open more info url event should open external link`() {
-        every { moreDetailsView.uiState } returns MoreDetailsUiState(artistUrl = "url")
+        every { moreDetailsView.uiState } returns MoreDetailsUiState(cardList = cards)
 
         onActionSubject.notify(MoreDetailsUiEvent.OpenMoreInfoUrl)
 
-        verify { moreDetailsView.openExternalLink("url") }
+        verify { moreDetailsView.openExternalLink(INFO_URL) }
     }
 
     @Test
     fun `on show info article event should search for an Article`() {
-        every { moreDetailsView.uiState } returns MoreDetailsUiState(artistName = "name")
+        every { moreDetailsView.uiState } returns MoreDetailsUiState(artistName = ARTIST_NAME)
 
         onActionSubject.notify(MoreDetailsUiEvent.ShowInfoArticle)
 
-        verify { moreDetailsModel.getInfoArticle("name") }
+        verify { moreDetailsModel.searchCard(ARTIST_NAME) }
     }
 
 }

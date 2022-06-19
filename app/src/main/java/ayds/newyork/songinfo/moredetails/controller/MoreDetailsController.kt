@@ -29,12 +29,12 @@ internal class MoreDetailsControllerImpl(
         }
 
     private fun openMoreInfoUrl() {
-        moreDetailsView.openExternalLink(moreDetailsView.uiState.artistUrl)
+        moreDetailsView.openExternalLink(moreDetailsView.uiState.getCurrentCard().infoURL)
     }
 
     private fun showInfoArticle() {
         Thread {
-            moreDetailsModel.getInfoArticle(moreDetailsView.uiState.artistName)
+            moreDetailsModel.searchCard(moreDetailsView.uiState.artistName)
         }.start()
     }
 }

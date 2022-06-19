@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="366dp"
+        android:layout_height="203dp"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toTopOf="@id/scrollView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="spread_inside"/>
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="379dp"
+        android:layout_height="367dp"
         app:layout_constraintBottom_toTopOf="@id/openUrlButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
-        >
+        app:layout_constraintTop_toBottomOf="@id/imageView">
 
         <TextView
             android:id="@+id/articlePane"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             android:autoLink="web"
             android:linksClickable="true"
-            />
+            android:padding="16dp" />
     </ScrollView>
-
-
 
     <Button
         android:id="@+id/openUrlButton"
@@ -47,6 +45,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scrollView" />
+
+    <TextView
+        android:id="@+id/sourcePane"
+        android:layout_width="188dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="367dp"
+        android:layout_marginEnd="303dp"
+        android:text="sourcePane"
+        app:layout_constraintBottom_toTopOf="@+id/openUrlButton"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/scrollView"
+        app:layout_constraintTop_toTopOf="@+id/scrollView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/sourceSpinner"
+        android:layout_width="176dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="210dp"
+        android:layout_marginEnd="212dp"
+        android:layout_marginBottom="377dp"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
